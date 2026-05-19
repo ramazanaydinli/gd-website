@@ -1,0 +1,11 @@
+{
+  // Cloudflare Workers config — deploys the Next.js static export in ./out
+  // as a Worker with static asset binding. Same edge network as Pages, with
+  // the new unified deploy model.
+  "name": "gd-website",
+  "compatibility_date": "2025-05-01",
+  "assets": {
+    "directory": "./out",
+    "not_found_handling": "404-page"
+  }
+}
