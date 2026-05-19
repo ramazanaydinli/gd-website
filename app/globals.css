@@ -573,6 +573,14 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   aspect-ratio: 16 / 10;
   background: #354254;
   overflow: hidden;
+  border-radius: 6px;
+}
+.gd-reach__map img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 38%;
+  display: block;
 }
 
 /* ─────────────────────────────────────────────────────────────────────
@@ -678,3 +686,128 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .gd-footer { grid-template-columns: 1fr; gap: 14px; text-align: center; }
   .gd-footer__brand, .gd-footer__links, .gd-footer__copy { justify-self: center; }
 }
+
+/* ───────────────────────────────────────────────────────────────────
+   Logo PNG — sits in nav (dark bg) and footer (dark bg). The source
+   PNG is black ring + red accents; on dark bg we invert to a clean
+   white silhouette so it stays visible. (User OK'd losing the red
+   for this small chrome use case.)
+   ─────────────────────────────────────────────────────────────────── */
+.gd-nav__brand img,
+.gd-footer__brand img {
+  display: block;
+  filter: brightness(0) invert(1);
+}
+
+/* ───────────────────────────────────────────────────────────────────
+   COOKIE BANNER — fixed bottom, dismissible
+   ─────────────────────────────────────────────────────────────────── */
+.gd-cookie {
+  position: fixed;
+  left: 24px; right: 24px; bottom: 24px;
+  z-index: 200;
+  background: rgba(11, 14, 20, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 18px 22px;
+  display: flex; align-items: center; gap: 22px;
+  color: var(--bone);
+  font-family: 'Inter Tight', sans-serif;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  animation: gdCookieIn 0.4s ease-out;
+}
+@keyframes gdCookieIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.gd-cookie__text {
+  flex: 1; font-size: 13px; line-height: 1.55; color: rgba(242, 238, 230, 0.82);
+}
+.gd-cookie__text strong { color: var(--bone); font-weight: 600; }
+.gd-cookie__text a { color: var(--spark); text-decoration: underline; text-underline-offset: 3px; }
+.gd-cookie__actions { display: flex; gap: 10px; flex-shrink: 0; }
+.gd-cookie__btn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+  padding: 10px 16px; border-radius: 4px; cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: transparent; color: var(--bone);
+  transition: background 0.15s, border-color 0.15s;
+}
+.gd-cookie__btn:hover { background: rgba(255, 255, 255, 0.06); }
+.gd-cookie__btn--primary {
+  background: var(--spark); border-color: var(--spark); color: #fff;
+}
+.gd-cookie__btn--primary:hover { background: #a30d24; border-color: #a30d24; }
+@media (max-width: 760px) {
+  .gd-cookie { left: 12px; right: 12px; bottom: 12px; padding: 14px 16px;
+    flex-direction: column; align-items: stretch; gap: 14px; }
+  .gd-cookie__actions { justify-content: flex-end; }
+}
+
+/* ───────────────────────────────────────────────────────────────────
+   LEGAL PAGES — /kvkk, /gizlilik, /kullanim
+   ─────────────────────────────────────────────────────────────────── */
+.gd-legal {
+  background: var(--paper);
+  color: var(--paper-ink);
+  min-height: 100vh;
+  padding: 80px 24px 120px;
+}
+.gd-legal__inner {
+  max-width: 820px;
+  margin: 0 auto;
+}
+.gd-legal__back {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--silver-2);
+  text-decoration: none;
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-bottom: 48px;
+  transition: color 0.15s;
+}
+.gd-legal__back:hover { color: var(--paper-ink); }
+.gd-legal__eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--spark);
+  margin-bottom: 16px;
+}
+.gd-legal__title {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 800; font-size: clamp(36px, 5vw, 56px);
+  letter-spacing: -0.02em; line-height: 1.05;
+  margin: 0 0 16px;
+}
+.gd-legal__meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--silver-2);
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--line);
+}
+.gd-legal__content {
+  padding-top: 40px;
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 15px; line-height: 1.7;
+  color: var(--paper-ink);
+}
+.gd-legal__content h2 {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700; font-size: 22px; letter-spacing: -0.01em;
+  margin: 40px 0 14px;
+  color: var(--paper-ink);
+}
+.gd-legal__content h2:first-child { margin-top: 0; }
+.gd-legal__content p { margin: 0 0 14px; color: rgba(20, 30, 50, 0.78); }
+.gd-legal__content ul {
+  margin: 0 0 14px; padding-left: 22px;
+  color: rgba(20, 30, 50, 0.78);
+}
+.gd-legal__content ul li { margin-bottom: 6px; }
+.gd-legal__content a { color: var(--spark); text-decoration: underline; text-underline-offset: 3px; }
+.gd-legal__content strong { color: var(--paper-ink); font-weight: 600; }
+

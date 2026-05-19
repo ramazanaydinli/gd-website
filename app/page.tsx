@@ -215,43 +215,53 @@ const CONTENT: Record<"tr" | "en", Locale> = {
       ],
       cols: [
         {
-          h: "İLETİŞİME GEÇİN",
+          h: "MERKEZ OFİS · DİYARBAKIR",
           body: (
             <>
-              info@gundoguinsaat.com.tr
+              Peyas Mah. Selahaddin Eyyubi Bul.
               <br />
-              +90 (212) 000 00 00
+              No: 35/1 İç Kapı No: 1
               <br />
-              +90 (312) 000 00 00
+              Kayapınar · Diyarbakır · Türkiye
+              <br />
+              <span style={{ opacity: 0.6, fontSize: "0.85em" }}>
+                Adres Kodu: 2423270434
+              </span>
+              <br />
+              <br />
+              Tel: +90 412 251 67 66
+              <br />
+              Faks: +90 412 251 67 66
             </>
           ),
         },
         {
-          h: "MERKEZ OFİS",
+          h: "ANKARA OFİS",
           body: (
             <>
-              Mustafa Kemal Mah.
+              Kızılırmak Mah. 1446. Cadde
               <br />
-              İnşaat Bulvarı No: 00
+              Alternatif Plaza Kat 10 No: 39
               <br />
-              06800 Ankara · Türkiye
+              Çankaya · Ankara · Türkiye
             </>
           ),
         },
         {
-          h: "YURT DIŞI",
+          h: "İLETİŞİM",
           body: (
             <>
-              International Office
+              <a href="mailto:info@gundoguinsaat.com">info@gundoguinsaat.com</a>
               <br />
-              Aktif: MENA · Orta Asya
               <br />
-              info@gundogu.intl
+              <span style={{ opacity: 0.6, fontSize: "0.85em" }}>
+                Pzt – Cum · 08:30 – 18:00
+              </span>
             </>
           ),
         },
       ],
-      ctaLabel: "İLETİŞİM FORMU →",
+      ctaLabel: "İLETİŞİME GEÇİN →",
     },
     marquee: [
       "Katı Atık",
@@ -418,43 +428,53 @@ const CONTENT: Record<"tr" | "en", Locale> = {
       ],
       cols: [
         {
+          h: "HEAD OFFICE · DİYARBAKIR",
+          body: (
+            <>
+              Peyas Mah. Selahaddin Eyyubi Blv.
+              <br />
+              No: 35/1 Door No: 1
+              <br />
+              Kayapınar · Diyarbakır · Türkiye
+              <br />
+              <span style={{ opacity: 0.6, fontSize: "0.85em" }}>
+                Address code: 2423270434
+              </span>
+              <br />
+              <br />
+              Tel: +90 412 251 67 66
+              <br />
+              Fax: +90 412 251 67 66
+            </>
+          ),
+        },
+        {
+          h: "ANKARA OFFICE",
+          body: (
+            <>
+              Kızılırmak Mah. 1446. Cadde
+              <br />
+              Alternatif Plaza Floor 10 No: 39
+              <br />
+              Çankaya · Ankara · Türkiye
+            </>
+          ),
+        },
+        {
           h: "CONTACT",
           body: (
             <>
-              info@gundoguinsaat.com.tr
+              <a href="mailto:info@gundoguinsaat.com">info@gundoguinsaat.com</a>
               <br />
-              +90 (212) 000 00 00
               <br />
-              +90 (312) 000 00 00
-            </>
-          ),
-        },
-        {
-          h: "HEAD OFFICE",
-          body: (
-            <>
-              Mustafa Kemal Mah.
-              <br />
-              İnşaat Blv. No: 00
-              <br />
-              06800 Ankara · Türkiye
-            </>
-          ),
-        },
-        {
-          h: "INTERNATIONAL",
-          body: (
-            <>
-              International Office
-              <br />
-              Active: MENA · Central Asia
-              <br />
-              info@gundogu.intl
+              <span style={{ opacity: 0.6, fontSize: "0.85em" }}>
+                Mon – Fri · 08:30 – 18:00
+              </span>
             </>
           ),
         },
       ],
-      ctaLabel: "CONTACT FORM →",
+      ctaLabel: "GET IN TOUCH →",
     },
     marquee: [
       "Solid Waste",
@@ -507,39 +527,18 @@ function ServiceIcon({ kind }: { kind: ServiceCard["icon"] }) {
   return null;
 }
 
-// Inline SVG logo for nav/footer (themable)
-function BrandMark({ size = 40, light = true }: { size?: number; light?: boolean }) {
-  const fg = light ? "#F2EEE6" : "#0B0B0B";
+// Brand mark — real PNG of the logo. CSS filter makes it a white silhouette
+// on dark chrome (nav, footer). Original colors stay intact wherever else.
+function BrandMark({ size = 40 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 200 200" style={{ display: "block" }}>
-      <defs>
-        <mask id={`gap-${size}`}>
-          <rect width="200" height="200" fill="white" />
-          <path d="M 100 100 L 200 70 A 100 100 0 0 1 200 130 Z" fill="black" />
-        </mask>
-      </defs>
-      <circle cx="100" cy="100" r="80" fill="none" stroke={fg} strokeWidth="22" mask={`url(#gap-${size})`} />
-      <g transform="translate(100 100)">
-        {[152, 162, 172, 182, 192, 202, 212, 222].map((a, i) => {
-          const rad = (a * Math.PI) / 180;
-          const len = i % 2 === 0 ? 14 : 18;
-          return (
-            <line
-              key={i}
-              x1={Math.cos(rad) * 95}
-              y1={Math.sin(rad) * 95}
-              x2={Math.cos(rad) * (95 + len)}
-              y2={Math.sin(rad) * (95 + len)}
-              stroke="#C8102E"
-              strokeWidth="6"
-              strokeLinecap="square"
-            />
-          );
-        })}
-      </g>
-      <path d="M 102 68 A 32 32 0 0 0 102 132 Z" fill="#C8102E" />
-      <rect x="102" y="92" width="58" height="16" fill="#C8102E" />
-    </svg>
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src="/images/symbol.png"
+      alt="Gündoğu İnşaat"
+      width={size}
+      height={size}
+      style={{ width: size, height: size, objectFit: "contain" }}
+    />
   );
 }
 
@@ -587,9 +586,9 @@ function Nav({
             EN
           </button>
         </div>
-        <a className="gd-nav__phone" href="tel:+902120000000">
+        <a className="gd-nav__phone" href="tel:+904122516766">
           <span className="gd-nav__phone-dot"></span>
-          +90 (212) 000 00 00
+          +90 412 251 67 66
         </a>
       </div>
     </nav>
@@ -630,7 +629,9 @@ function Hero({ t }: { t: Locale }) {
       <div className="gd-hero__veil"></div>
 
       <aside className="gd-hero__side">
-        <span className="gd-hero__side-text">GÜNDOĞU · 01 / 04</span>
+        <span className="gd-hero__side-text">
+          GÜNDOĞU · {String(idx + 1).padStart(2, "0")} / {String(slides.length).padStart(2, "0")}
+        </span>
       </aside>
 
       <div className="gd-hero__content">
@@ -841,7 +842,7 @@ function Contact({ t }: { t: Locale }) {
           <div className="gd-contact__col">
             <h4>{c.cols[0].h}</h4>
             <p>{c.cols[0].body}</p>
-            <a className="gd-contact__cta" href="#">
+            <a className="gd-contact__cta" href="mailto:info@gundoguinsaat.com">
               {c.ctaLabel.replace("→", "")}
               <span className="gd-contact__cta-arrow">→</span>
             </a>
@@ -863,7 +864,7 @@ function Contact({ t }: { t: Locale }) {
           </div>
           <div className="gd-footer__links">
             {t.footerLinks.map((l, i) => (
-              <a key={i} href="#">
+              <a key={i} href={["/kvkk/", "/gizlilik/", "/kullanim/"][i]}>
                 {l}
               </a>
             ))}
@@ -872,6 +873,78 @@ function Contact({ t }: { t: Locale }) {
         </footer>
       </div>
     </section>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────
+// COOKIE BANNER — first-visit consent, persisted in localStorage
+// ─────────────────────────────────────────────────────────────────────
+const COOKIE_KEY = "gd-cookie-consent";
+
+function CookieBanner({ lang }: { lang: "tr" | "en" }) {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    try {
+      const stored = window.localStorage.getItem(COOKIE_KEY);
+      if (!stored) setVisible(true);
+    } catch {
+      // localStorage blocked (private mode / CSP) — show the banner anyway
+      setVisible(true);
+    }
+  }, []);
+
+  const choose = (value: "accepted" | "rejected") => {
+    try {
+      window.localStorage.setItem(COOKIE_KEY, value);
+    } catch {
+      // ignore — user just won't see the choice persist
+    }
+    setVisible(false);
+  };
+
+  if (!visible) return null;
+
+  const copy =
+    lang === "tr"
+      ? {
+          text: (
+            <>
+              Bu site, kullanıcı deneyimini iyileştirmek için <strong>çerez</strong>{" "}
+              kullanır. Devam ederek kullanımı kabul etmiş olursunuz. Detaylar için{" "}
+              <a href="/gizlilik/">Gizlilik Politikamızı</a> inceleyin.
+            </>
+          ),
+          accept: "Kabul Et",
+          reject: "Reddet",
+        }
+      : {
+          text: (
+            <>
+              This site uses <strong>cookies</strong> to improve your experience. By
+              continuing you accept their use. See our{" "}
+              <a href="/gizlilik/">Privacy Policy</a> for details.
+            </>
+          ),
+          accept: "Accept",
+          reject: "Reject",
+        };
+
+  return (
+    <div className="gd-cookie" role="dialog" aria-label="Cookie consent">
+      <div className="gd-cookie__text">{copy.text}</div>
+      <div className="gd-cookie__actions">
+        <button className="gd-cookie__btn" onClick={() => choose("rejected")}>
+          {copy.reject}
+        </button>
+        <button
+          className="gd-cookie__btn gd-cookie__btn--primary"
+          onClick={() => choose("accepted")}
+        >
+          {copy.accept}
+        </button>
+      </div>
+    </div>
   );
 }
 
@@ -890,6 +963,7 @@ export default function Home() {
       <Strip items={t.marquee} />
       <Reach t={t} />
       <Contact t={t} />
+      <CookieBanner lang={lang} />
     </>
   );
 }
