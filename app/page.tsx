@@ -1,65 +1,895 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useEffect, useState, type ReactNode } from "react";
+
+// ─────────────────────────────────────────────────────────────────────
+// IMAGE BINDINGS — slot id → /public/images/*
+// ─────────────────────────────────────────────────────────────────────
+const HERO_IMAGES = [
+  "/images/solid_waste.jpeg",
+  "/images/waste_water.jpeg",
+  "/images/drinking_water.jpeg",
+  "/images/super_infra_structure.jpeg",
+];
+const ABOUT_STRIP_IMAGE = "/images/dam.jpeg";
+const REACH_MAP_IMAGE = "/images/map.jpeg";
+
+// ─────────────────────────────────────────────────────────────────────
+// CONTENT — TR + EN
+// ─────────────────────────────────────────────────────────────────────
+type Slide = {
+  num: string;
+  label: string;
+  headline: ReactNode[];
+  sub: string;
+};
+
+type Metric = { num: string; sup?: string; label: string };
+
+type ServiceCard = {
+  num: string;
+  tag: string;
+  title: string;
+  desc: string;
+  items: string[];
+  icon: "recycle" | "water" | "pipe" | "beam";
+};
+
+type ContactCol = { h: string; body: ReactNode };
+
+type Locale = {
+  nav: string[];
+  heroSlides: Slide[];
+  side: string;
+  scroll: string;
+  about: {
+    eyebrow: string;
+    title: ReactNode[];
+    copy: string[];
+    metrics: Metric[];
+    stripCaption: string;
+  };
+  services: {
+    eyebrow: string;
+    title: ReactNode[];
+    sub: string;
+    cards: ServiceCard[];
+  };
+  reach: { eyebrow: string; title: ReactNode[]; body: string };
+  contact: { title: ReactNode[]; cols: ContactCol[]; ctaLabel: string };
+  marquee: string[];
+  footerLinks: string[];
+  footerCopy: string;
+};
+
+const CONTENT: Record<"tr" | "en", Locale> = {
+  tr: {
+    nav: ["ANA SAYFA", "KURUMSAL", "FAALİYET ALANLARI", "İLETİŞİM"],
+    heroSlides: [
+      {
+        num: "01",
+        label: "KATI ATIK TESİSLERİ",
+        headline: [
+          "ATIKTAN",
+          "DEĞER ÜRETEN",
+          <em key="a" className="accent">
+            ALTYAPI.
+          </em>,
+        ],
+        sub: "Modern katı atık yönetim tesislerinin tasarımı ve inşası — sürdürülebilir, ölçeklenebilir, yönetmeliklere tam uyumlu.",
+      },
+      {
+        num: "02",
+        label: "ATIK SU ARITMA",
+        headline: [
+          "ENDÜSTRİYEL",
+          "VE EVSEL SUYA",
+          <em key="b" className="accent">
+            İKİNCİ HAYAT.
+          </em>,
+        ],
+        sub: "Mekanik, biyolojik ve ileri arıtma proseslerinin entegre tasarımı — küçük ölçekli paket tesisten metropol kapasiteye.",
+      },
+      {
+        num: "03",
+        label: "İÇME SUYU & KANALİZASYON",
+        headline: [
+          "ŞEHRİN",
+          "HAYAT",
+          <em key="c" className="accent">
+            DAMARLARI.
+          </em>,
+        ],
+        sub: "İçme suyu şebekeleri, terfi istasyonları, kanalizasyon hat ve kolektör imalatı — hassas mühendislik, dayanıklı yapı.",
+      },
+      {
+        num: "04",
+        label: "ALTYAPI & ÜST YAPI",
+        headline: [
+          "TEMELDEN",
+          "ÇATIYA,",
+          <em key="d" className="accent">
+            EKSİKSİZ İNŞAA.
+          </em>,
+        ],
+        sub: "Yol, sanat yapısı, betonarme ve çelik üst yapı işleri — anahtar teslim, zamanında, kontrollü kalite ile.",
+      },
+    ],
+    side: "BÖLÜM · 01 / 04",
+    scroll: "KAYDIR",
+    about: {
+      eyebrow: "KURUMSAL · GÜNDOĞU İNŞAAT",
+      title: [
+        "ALTYAPIDAN ÜST YAPIYA,",
+        <br key="1" />,
+        "ZAMANI AŞAN ",
+        <em key="2">MÜHENDİSLİK.</em>,
+      ],
+      copy: [
+        "Gündoğu İnşaat; katı atık tesisleri, atık su arıtma, içme suyu ve kanalizasyon sistemleri ile altyapı ve üst yapı işleri olmak üzere dört ana faaliyet alanında, hem yurt içinde hem de yurt dışında projeler yürütmektedir.",
+        "Her proje, sahaya özgü mühendislik çözümleriyle planlanır; tasarımdan teslim sonrası işletmeye kadar tek elden, kontrollü ve şeffaf süreçlerle hayata geçirilir.",
+      ],
+      metrics: [
+        { num: "4", sup: "ana", label: "FAALİYET ALANI" },
+        { num: "2", sup: "kıta", label: "YURT İÇİ + YURTDIŞI" },
+        { num: "∞", label: "M³ SU İŞLEME KAPASİTESİ" },
+        { num: "1", sup: "#", label: "ANAHTAR TESLİM ORTAK" },
+      ],
+      stripCaption: "SAHADAN · TESİS GÖRÜNTÜSÜ",
+    },
+    services: {
+      eyebrow: "02 — FAALİYET ALANLARI",
+      title: [
+        "DÖRT ALAN.",
+        <br key="x" />,
+        "TEK ",
+        <em key="y">MÜHENDİSLİK DİSİPLİNİ.</em>,
+      ],
+      sub: "Anahtar teslim altyapı ve üst yapı projelerini, yurt içi ve yurt dışı sahalarında, sözleşmeden işletmeye dek tek bir mühendislik diliyle yürütüyoruz.",
+      cards: [
+        {
+          num: "01",
+          tag: "ÇEVRE · ATIK",
+          title: "Katı Atık Tesisleri",
+          desc: "Toplama, ayrıştırma, geri kazanım ve bertaraf altyapısının tasarım ve inşası.",
+          items: [
+            "Düzenli depolama sahaları",
+            "Mekanik ayrıştırma",
+            "Kompost ve geri kazanım",
+            "Sızıntı suyu yönetimi",
+          ],
+          icon: "recycle",
+        },
+        {
+          num: "02",
+          tag: "SU · ARITMA",
+          title: "Atık Su Arıtma Tesisleri",
+          desc: "Evsel ve endüstriyel atık su için mekanik, biyolojik ve ileri arıtma sistemleri.",
+          items: [
+            "Paket arıtma tesisleri",
+            "Biyolojik reaktörler (MBR/SBR)",
+            "Çamur susuzlaştırma",
+            "İleri arıtma & deşarj",
+          ],
+          icon: "water",
+        },
+        {
+          num: "03",
+          tag: "ŞEBEKE · ŞEHİR",
+          title: "İçme Suyu & Kanalizasyon",
+          desc: "Şehir ölçeğinde içme suyu ve kanalizasyon şebekelerinin imalatı ve revizyonu.",
+          items: [
+            "İçme suyu hat & şebeke",
+            "Terfi istasyonları",
+            "Kanalizasyon kolektörleri",
+            "SCADA & izleme entegrasyonu",
+          ],
+          icon: "pipe",
+        },
+        {
+          num: "04",
+          tag: "YAPI · İNŞAAT",
+          title: "Altyapı & Üst Yapı",
+          desc: "Yol, sanat yapıları, betonarme ve çelik üst yapı imalatı — anahtar teslim.",
+          items: [
+            "Yol & sanat yapıları",
+            "Betonarme & çelik yapı",
+            "Endüstriyel yapılar",
+            "Kazı, dolgu, yol üst yapısı",
+          ],
+          icon: "beam",
+        },
+      ],
+    },
+    reach: {
+      eyebrow: "03 — COĞRAFYA",
+      title: ["YURT İÇİ.", <br key="x" />, "YURT ", <em key="y">DIŞI.</em>],
+      body: "Gündoğu İnşaat; Türkiye genelinde aktif olarak yürüttüğü altyapı ve üst yapı projelerinin yanı sıra, yurtdışı sahalarda da mühendislik ve yapım hizmetleri sunmaktadır. Lokasyondan bağımsız aynı disiplin: doğru planlama, denetimli inşa, şeffaf raporlama.",
+    },
+    contact: {
+      title: [
+        "PROJENİZ İÇİN",
+        <br key="x" />,
+        <em key="y">GÜNDOĞU&apos;YU</em>,
+        " TANIYIN.",
+      ],
+      cols: [
+        {
+          h: "İLETİŞİME GEÇİN",
+          body: (
+            <>
+              info@gundoguinsaat.com.tr
+              <br />
+              +90 (212) 000 00 00
+              <br />
+              +90 (312) 000 00 00
+            </>
+          ),
+        },
+        {
+          h: "MERKEZ OFİS",
+          body: (
+            <>
+              Mustafa Kemal Mah.
+              <br />
+              İnşaat Bulvarı No: 00
+              <br />
+              06800 Ankara · Türkiye
+            </>
+          ),
+        },
+        {
+          h: "YURT DIŞI",
+          body: (
+            <>
+              International Office
+              <br />
+              Aktif: MENA · Orta Asya
+              <br />
+              info@gundogu.intl
+            </>
+          ),
+        },
+      ],
+      ctaLabel: "İLETİŞİM FORMU →",
+    },
+    marquee: [
+      "Katı Atık",
+      "Atık Su Arıtma",
+      "İçme Suyu",
+      "Kanalizasyon",
+      "Altyapı",
+      "Üst Yapı",
+      "Yurt İçi",
+      "Yurt Dışı",
+    ],
+    footerLinks: ["KVKK", "GİZLİLİK", "KULLANIM"],
+    footerCopy: "© 2026 GÜNDOĞU İNŞAAT · TÜM HAKLARI SAKLIDIR",
+  },
+  en: {
+    nav: ["HOME", "COMPANY", "EXPERTISE", "CONTACT"],
+    heroSlides: [
+      {
+        num: "01",
+        label: "SOLID WASTE FACILITIES",
+        headline: [
+          "INFRASTRUCTURE",
+          "THAT TURNS WASTE",
+          <em key="a" className="accent">
+            INTO VALUE.
+          </em>,
+        ],
+        sub: "Design and construction of modern solid-waste management facilities — sustainable, scalable, fully compliant.",
+      },
+      {
+        num: "02",
+        label: "WASTEWATER TREATMENT",
+        headline: [
+          "A SECOND LIFE",
+          "FOR INDUSTRIAL",
+          <em key="b" className="accent">
+            AND URBAN WATER.
+          </em>,
+        ],
+        sub: "Integrated mechanical, biological and advanced treatment design — from package plants to metropolitan capacity.",
+      },
+      {
+        num: "03",
+        label: "WATER & SEWERAGE",
+        headline: [
+          "THE CITY’S",
+          "LIFE",
+          <em key="c" className="accent">
+            LINES.
+          </em>,
+        ],
+        sub: "Drinking-water networks, pumping stations, sewerage lines and collectors — precise engineering, durable build.",
+      },
+      {
+        num: "04",
+        label: "INFRASTRUCTURE & BUILDING",
+        headline: [
+          "FROM FOUNDATION",
+          "TO ROOF —",
+          <em key="d" className="accent">
+            END-TO-END.
+          </em>,
+        ],
+        sub: "Roads, art structures, reinforced concrete and steel superstructures — turnkey, on time, quality controlled.",
+      },
+    ],
+    side: "SECTION · 01 / 04",
+    scroll: "SCROLL",
+    about: {
+      eyebrow: "COMPANY · GÜNDOĞU İNŞAAT",
+      title: [
+        "FROM INFRASTRUCTURE TO BUILDING,",
+        <br key="1" />,
+        "ENGINEERING THAT ",
+        <em key="2">OUTLASTS.</em>,
+      ],
+      copy: [
+        "Gündoğu İnşaat operates across four primary fields — solid-waste facilities, wastewater treatment, water and sewerage networks, and infrastructure & building works — both inside Türkiye and abroad.",
+        "Every project is planned with site-specific engineering, delivered as a single-source, controlled and transparent process from design to commissioning.",
+      ],
+      metrics: [
+        { num: "4", sup: "core", label: "FIELDS OF EXPERTISE" },
+        { num: "2", sup: "cont.", label: "DOMESTIC + INTERNATIONAL" },
+        { num: "∞", label: "M³ WATER CAPACITY" },
+        { num: "1", sup: "#", label: "TURNKEY PARTNER" },
+      ],
+      stripCaption: "ON SITE · FACILITY",
+    },
+    services: {
+      eyebrow: "02 — EXPERTISE",
+      title: [
+        "FOUR FIELDS.",
+        <br key="x" />,
+        "ONE ",
+        <em key="y">ENGINEERING DISCIPLINE.</em>,
+      ],
+      sub: "We deliver turnkey infrastructure and building projects in Türkiye and abroad under a single engineering language — from contract to commissioning.",
+      cards: [
+        {
+          num: "01",
+          tag: "ENV · WASTE",
+          title: "Solid Waste Facilities",
+          desc: "Design and construction of collection, sorting, recovery and disposal infrastructure.",
+          items: [
+            "Sanitary landfills",
+            "Mechanical sorting",
+            "Composting & recovery",
+            "Leachate management",
+          ],
+          icon: "recycle",
+        },
+        {
+          num: "02",
+          tag: "WATER · TREATMENT",
+          title: "Wastewater Treatment",
+          desc: "Mechanical, biological and advanced systems for domestic and industrial wastewater.",
+          items: [
+            "Package treatment plants",
+            "Biological reactors (MBR/SBR)",
+            "Sludge dewatering",
+            "Tertiary treatment",
+          ],
+          icon: "water",
+        },
+        {
+          num: "03",
+          tag: "NETWORK · CITY",
+          title: "Water & Sewerage",
+          desc: "City-scale drinking water and sewerage networks — installation and rehabilitation.",
+          items: [
+            "Distribution networks",
+            "Pumping stations",
+            "Sewer collectors",
+            "SCADA integration",
+          ],
+          icon: "pipe",
+        },
+        {
+          num: "04",
+          tag: "STRUCTURE · BUILD",
+          title: "Infrastructure & Building",
+          desc: "Roads, art structures, reinforced concrete and steel superstructures — turnkey.",
+          items: [
+            "Roads & art structures",
+            "RC & steel structures",
+            "Industrial buildings",
+            "Earthworks & pavement",
+          ],
+          icon: "beam",
+        },
+      ],
+    },
+    reach: {
+      eyebrow: "03 — REACH",
+      title: ["DOMESTIC.", <br key="x" />, <em key="y">INTERNATIONAL.</em>],
+      body: "Beyond active operations across Türkiye, Gündoğu İnşaat delivers engineering and construction services on international sites. Same discipline regardless of geography: rigorous planning, controlled execution, transparent reporting.",
+    },
+    contact: {
+      title: [
+        "MEET ",
+        <em key="y">GÜNDOĞU</em>,
+        <br key="x" />,
+        "FOR YOUR NEXT PROJECT.",
+      ],
+      cols: [
+        {
+          h: "CONTACT",
+          body: (
+            <>
+              info@gundoguinsaat.com.tr
+              <br />
+              +90 (212) 000 00 00
+              <br />
+              +90 (312) 000 00 00
+            </>
+          ),
+        },
+        {
+          h: "HEAD OFFICE",
+          body: (
+            <>
+              Mustafa Kemal Mah.
+              <br />
+              İnşaat Blv. No: 00
+              <br />
+              06800 Ankara · Türkiye
+            </>
+          ),
+        },
+        {
+          h: "INTERNATIONAL",
+          body: (
+            <>
+              International Office
+              <br />
+              Active: MENA · Central Asia
+              <br />
+              info@gundogu.intl
+            </>
+          ),
+        },
+      ],
+      ctaLabel: "CONTACT FORM →",
+    },
+    marquee: [
+      "Solid Waste",
+      "Wastewater",
+      "Drinking Water",
+      "Sewerage",
+      "Infrastructure",
+      "Building Works",
+      "Domestic",
+      "International",
+    ],
+    footerLinks: ["PRIVACY", "TERMS", "GDPR"],
+    footerCopy: "© 2026 GÜNDOĞU İNŞAAT · ALL RIGHTS RESERVED",
+  },
+};
+
+// ─────────────────────────────────────────────────────────────────────
+// ICONS
+// ─────────────────────────────────────────────────────────────────────
+function ServiceIcon({ kind }: { kind: ServiceCard["icon"] }) {
+  if (kind === "recycle")
+    return (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
+        <path d="M7 4l-3 5 3 0M4 9l3-5 5 9M17 20l3-5-3 0M20 15l-3 5-5-9M11 14l3 5-9 0" strokeLinejoin="round" />
+      </svg>
+    );
+  if (kind === "water")
+    return (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
+        <path d="M12 3c0 0 6 7 6 11a6 6 0 01-12 0c0-4 6-11 6-11z" />
+        <path d="M9 14a3 3 0 003 3" strokeLinecap="round" />
+      </svg>
+    );
+  if (kind === "pipe")
+    return (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
+        <path d="M3 8h12a3 3 0 010 6H9a3 3 0 000 6h12" />
+        <circle cx="15" cy="8" r="2" fill="currentColor" />
+        <circle cx="9" cy="20" r="2" fill="currentColor" />
+      </svg>
+    );
+  if (kind === "beam")
+    return (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
+        <rect x="4" y="4" width="16" height="3" />
+        <rect x="4" y="17" width="16" height="3" />
+        <rect x="10.5" y="7" width="3" height="10" />
+      </svg>
+    );
+  return null;
+}
+
+// Inline SVG logo for nav/footer (themable)
+function BrandMark({ size = 40, light = true }: { size?: number; light?: boolean }) {
+  const fg = light ? "#F2EEE6" : "#0B0B0B";
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+    <svg width={size} height={size} viewBox="0 0 200 200" style={{ display: "block" }}>
+      <defs>
+        <mask id={`gap-${size}`}>
+          <rect width="200" height="200" fill="white" />
+          <path d="M 100 100 L 200 70 A 100 100 0 0 1 200 130 Z" fill="black" />
+        </mask>
+      </defs>
+      <circle cx="100" cy="100" r="80" fill="none" stroke={fg} strokeWidth="22" mask={`url(#gap-${size})`} />
+      <g transform="translate(100 100)">
+        {[152, 162, 172, 182, 192, 202, 212, 222].map((a, i) => {
+          const rad = (a * Math.PI) / 180;
+          const len = i % 2 === 0 ? 14 : 18;
+          return (
+            <line
+              key={i}
+              x1={Math.cos(rad) * 95}
+              y1={Math.sin(rad) * 95}
+              x2={Math.cos(rad) * (95 + len)}
+              y2={Math.sin(rad) * (95 + len)}
+              stroke="#C8102E"
+              strokeWidth="6"
+              strokeLinecap="square"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+          );
+        })}
+      </g>
+      <path d="M 102 68 A 32 32 0 0 0 102 132 Z" fill="#C8102E" />
+      <rect x="102" y="92" width="58" height="16" fill="#C8102E" />
+    </svg>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────
+// NAV
+// ─────────────────────────────────────────────────────────────────────
+function Nav({
+  lang,
+  setLang,
+  t,
+}: {
+  lang: "tr" | "en";
+  setLang: (l: "tr" | "en") => void;
+  t: Locale;
+}) {
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 60);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+  return (
+    <nav className={`gd-nav${scrolled ? " scrolled" : ""}`}>
+      <a className="gd-nav__brand" href="#top">
+        <BrandMark size={40} />
+        <div className="gd-nav__brand-text">
+          <strong>GÜNDOĞU</strong>
+          <span>İNŞAAT</span>
         </div>
-      </main>
+      </a>
+      <ul className="gd-nav__list">
+        {t.nav.map((item, i) => (
+          <li key={i}>
+            <a href={["#top", "#about", "#services", "#contact"][i]}>{item}</a>
+          </li>
+        ))}
+      </ul>
+      <div className="gd-nav__right">
+        <div className="gd-nav__lang">
+          <button className={lang === "tr" ? "active" : ""} onClick={() => setLang("tr")}>
+            TR
+          </button>
+          <span>·</span>
+          <button className={lang === "en" ? "active" : ""} onClick={() => setLang("en")}>
+            EN
+          </button>
+        </div>
+        <a className="gd-nav__phone" href="tel:+902120000000">
+          <span className="gd-nav__phone-dot"></span>
+          +90 (212) 000 00 00
+        </a>
+      </div>
+    </nav>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────
+// HERO
+// ─────────────────────────────────────────────────────────────────────
+function Hero({ t }: { t: Locale }) {
+  const [idx, setIdx] = useState(0);
+  const slides = t.heroSlides;
+  const [paused, setPaused] = useState(false);
+
+  useEffect(() => {
+    if (paused) return;
+    const id = setInterval(() => setIdx((i) => (i + 1) % slides.length), 6000);
+    return () => clearInterval(id);
+  }, [paused, slides.length]);
+
+  const next = () => setIdx((i) => (i + 1) % slides.length);
+  const prev = () => setIdx((i) => (i - 1 + slides.length) % slides.length);
+
+  const slide = slides[idx];
+
+  return (
+    <section
+      id="top"
+      className="gd-hero"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      <div className="gd-hero__bg"></div>
+      <div className="gd-hero__photo" key={`photo-${idx}`}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={HERO_IMAGES[idx]} alt={slide.label} />
+      </div>
+      <div className="gd-hero__veil"></div>
+
+      <aside className="gd-hero__side">
+        <span className="gd-hero__side-text">GÜNDOĞU · 01 / 04</span>
+      </aside>
+
+      <div className="gd-hero__content">
+        <div className="gd-hero__copy" key={idx}>
+          <div className="gd-hero__eyebrow">
+            <span className="gd-hero__eyebrow-num">{slide.num}</span>
+            <span className="gd-hero__eyebrow-line"></span>
+            <span className="gd-hero__eyebrow-label">{slide.label}</span>
+          </div>
+          <h1 className="gd-hero__headline">
+            {slide.headline.map((line, i) =>
+              i < slide.headline.length - 1 ? (
+                <span key={i}>
+                  {line}
+                  <br />
+                </span>
+              ) : (
+                <span key={i}>{line}</span>
+              )
+            )}
+          </h1>
+          <p className="gd-hero__sub">{slide.sub}</p>
+        </div>
+
+        <div className="gd-hero__bottom">
+          <div className="gd-hero__dots">
+            {slides.map((_, i) => (
+              <span
+                key={i}
+                className={`gd-hero__dot${i === idx ? " active" : ""}`}
+                onClick={() => setIdx(i)}
+              ></span>
+            ))}
+          </div>
+          <div className="gd-hero__scroll">
+            <span>{t.scroll}</span>
+            <span className="gd-hero__scroll-line"></span>
+          </div>
+          <div className="gd-hero__arrows">
+            <button className="gd-hero__arrow" onClick={prev} aria-label="prev">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+                <path d="M15 18l-6-6 6-6" />
+              </svg>
+            </button>
+            <button className="gd-hero__arrow" onClick={next} aria-label="next">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+                <path d="M9 6l6 6-6 6" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────
+// ABOUT
+// ─────────────────────────────────────────────────────────────────────
+function About({ t }: { t: Locale }) {
+  const a = t.about;
+  return (
+    <section id="about" className="gd-about">
+      <div className="gd-about__inner">
+        <div className="gd-about__head">
+          <div>
+            <div className="gd-about__eyebrow">{a.eyebrow}</div>
+            <h2 className="gd-about__title">{a.title}</h2>
+          </div>
+          <div className="gd-about__copy">
+            {a.copy.map((p, i) => (
+              <p key={i}>{p}</p>
+            ))}
+          </div>
+        </div>
+
+        <div className="gd-about__metrics">
+          {a.metrics.map((m, i) => (
+            <div className="gd-about__metric" key={i}>
+              <div className="gd-about__metric-num">
+                {m.num}
+                {m.sup && <sup>{m.sup}</sup>}
+              </div>
+              <div className="gd-about__metric-label">{m.label}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="gd-about__strip">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={ABOUT_STRIP_IMAGE} alt={a.stripCaption} />
+          <div className="gd-about__strip-caption">
+            <span className="gd-about__strip-caption-dot"></span>
+            {a.stripCaption}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────
+// SERVICES
+// ─────────────────────────────────────────────────────────────────────
+function Services({ t }: { t: Locale }) {
+  const s = t.services;
+  return (
+    <section id="services" className="gd-services">
+      <div className="gd-services__inner">
+        <div className="gd-services__head">
+          <div>
+            <div className="gd-services__eyebrow">{s.eyebrow}</div>
+            <h2 className="gd-services__title">{s.title}</h2>
+          </div>
+          <p className="gd-services__sub">{s.sub}</p>
+        </div>
+
+        <div className="gd-services__grid">
+          {s.cards.map((c, i) => (
+            <article className="gd-card" key={i}>
+              <div className="gd-card__top">
+                <span className="gd-card__num">{c.num}</span>
+                <span className="gd-card__icon">
+                  <ServiceIcon kind={c.icon} />
+                </span>
+              </div>
+              <h3 className="gd-card__title">{c.title}</h3>
+              <p className="gd-card__desc">{c.desc}</p>
+              <ul className="gd-card__list">
+                {c.items.map((it, j) => (
+                  <li key={j}>{it}</li>
+                ))}
+              </ul>
+              <div className="gd-card__bottom">
+                <span className="gd-card__tag">{c.tag}</span>
+                <button className="gd-card__arrow" aria-label="more">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+                    <path d="M5 12h14M13 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────
+// MARQUEE
+// ─────────────────────────────────────────────────────────────────────
+function Strip({ items }: { items: string[] }) {
+  const list = (
+    <span>
+      {items.map((it, i) => (
+        <span key={i}>
+          <span className="gd-strip__item">{it}</span>
+          <span className="gd-strip__sep"></span>
+        </span>
+      ))}
+    </span>
+  );
+  return (
+    <div className="gd-strip">
+      <div className="gd-strip__track">
+        {list}
+        {list}
+        {list}
+        {list}
+      </div>
     </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────
+// REACH
+// ─────────────────────────────────────────────────────────────────────
+function Reach({ t }: { t: Locale }) {
+  const r = t.reach;
+  return (
+    <section className="gd-reach">
+      <div className="gd-reach__inner">
+        <div className="gd-reach__copy">
+          <div className="gd-reach__eyebrow">{r.eyebrow}</div>
+          <h2 className="gd-reach__title">{r.title}</h2>
+          <p className="gd-reach__body">{r.body}</p>
+        </div>
+        <div className="gd-reach__map">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={REACH_MAP_IMAGE} alt="Reach map" />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────
+// CONTACT + FOOTER
+// ─────────────────────────────────────────────────────────────────────
+function Contact({ t }: { t: Locale }) {
+  const c = t.contact;
+  return (
+    <section id="contact" className="gd-contact">
+      <div className="gd-contact__inner">
+        <h2 className="gd-contact__title">{c.title}</h2>
+        <div className="gd-contact__cols">
+          <div className="gd-contact__col">
+            <h4>{c.cols[0].h}</h4>
+            <p>{c.cols[0].body}</p>
+            <a className="gd-contact__cta" href="#">
+              {c.ctaLabel.replace("→", "")}
+              <span className="gd-contact__cta-arrow">→</span>
+            </a>
+          </div>
+          <div className="gd-contact__col">
+            <h4>{c.cols[1].h}</h4>
+            <p>{c.cols[1].body}</p>
+          </div>
+          <div className="gd-contact__col">
+            <h4>{c.cols[2].h}</h4>
+            <p>{c.cols[2].body}</p>
+          </div>
+        </div>
+
+        <footer className="gd-footer">
+          <div className="gd-footer__brand">
+            <BrandMark size={24} />
+            <span>GÜNDOĞU İNŞAAT</span>
+          </div>
+          <div className="gd-footer__links">
+            {t.footerLinks.map((l, i) => (
+              <a key={i} href="#">
+                {l}
+              </a>
+            ))}
+          </div>
+          <div className="gd-footer__copy">{t.footerCopy}</div>
+        </footer>
+      </div>
+    </section>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────
+// PAGE
+// ─────────────────────────────────────────────────────────────────────
+export default function Home() {
+  const [lang, setLang] = useState<"tr" | "en">("tr");
+  const t = CONTENT[lang];
+  return (
+    <>
+      <Nav lang={lang} setLang={setLang} t={t} />
+      <Hero t={t} />
+      <About t={t} />
+      <Services t={t} />
+      <Strip items={t.marquee} />
+      <Reach t={t} />
+      <Contact t={t} />
+    </>
   );
 }
