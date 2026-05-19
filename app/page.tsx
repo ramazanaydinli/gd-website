@@ -842,7 +842,16 @@ function Contact({ t }: { t: Locale }) {
           <div className="gd-contact__col">
             <h4>{c.cols[0].h}</h4>
             <p>{c.cols[0].body}</p>
-            <a className="gd-contact__cta" href="mailto:info@gundoguinsaat.com">
+            <a
+              className="gd-contact__cta"
+              href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(
+                "info@gundoguinsaat.com"
+              )}&su=${encodeURIComponent(
+                "İletişim Talebi — Gündoğu İnşaat"
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               {c.ctaLabel.replace("→", "")}
               <span className="gd-contact__cta-arrow">→</span>
             </a>
