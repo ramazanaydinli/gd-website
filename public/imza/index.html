@@ -237,15 +237,21 @@
     };
   }
 
-  // Gündoğu logo + optional MESOGEOS stacked beneath with a thin divider
-  function logoImgs(d, w){
-    var s = '<img src="'+d.logo+'" alt="Gündoğu İnşaat" width="'+w+'" style="display:block;border:0;">';
-    if(d.meso){
-      var mw = Math.round(w*0.94);
-      s += '<div style="border-top:1px solid #E4E4E4;margin-top:12px;padding-top:12px;line-height:0;">'
-         + '<img src="'+d.meso+'" alt="MESOGEOS" width="'+mw+'" style="display:block;border:0;"></div>';
+  // Gündoğu logo + optional MESOGEOS. dir 'h' = side by side (right), else stacked beneath.
+  function logoImgs(d, w, dir){
+    var g = '<img src="'+d.logo+'" alt="Gündoğu İnşaat" width="'+w+'" style="display:block;border:0;">';
+    if(!d.meso) return g;
+    if(dir==='h'){
+      var mwh = Math.round(w*1.13); // height-matched to Gündoğu mark
+      return '<table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;"><tr>'
+        +'<td style="vertical-align:middle;padding-right:16px;">'+g+'</td>'
+        +'<td style="vertical-align:middle;padding-left:16px;border-left:1px solid #E4E4E4;">'
+        +'<img src="'+d.meso+'" alt="MESOGEOS" width="'+mwh+'" style="display:block;border:0;"></td>'
+        +'</tr></table>';
     }
-    return s;
+    var mwv = Math.round(w*0.94);
+    return g+'<div style="border-top:1px solid #E4E4E4;margin-top:12px;padding-top:12px;line-height:0;">'
+      +'<img src="'+d.meso+'" alt="MESOGEOS" width="'+mwv+'" style="display:block;border:0;"></div>';
   }
   function mailA(e,color){ return '<a href="mailto:'+esc(e)+'" style="color:'+color+';text-decoration:none;">'+esc(e)+'</a>'; }
   function webA(w,color,bold){ return '<a href="'+w.href+'" style="color:'+color+';text-decoration:none;'+(bold?'font-weight:bold;':'')+'">'+w.disp+'</a>'; }
@@ -287,7 +293,7 @@
     var contact = line ? '<div style="font-size:12px;color:#3A3A3A;line-height:1.7;padding-top:9px;">'+line+'</div>' : '';
     var addr = d.address ? '<div style="font-size:11.5px;color:#9A9A9A;line-height:1.7;padding-top:4px;">'+esc(d.address)+'</div>' : '';
     return '<table cellpadding="0" cellspacing="0" border="0" style="font-family:Arial,Helvetica,sans-serif;color:#1A1A1A;">'
-      +'<tr><td style="padding-bottom:14px;">'+logoImgs(d,180)+'</td></tr>'
+      +'<tr><td style="padding-bottom:14px;">'+logoImgs(d,180,'h')+'</td></tr>'
       +'<tr><td style="border-top:1px solid #E4E4E4;padding-top:13px;">'+nameLine+contact+addr+'</td></tr></table>';
   }
 
@@ -297,7 +303,7 @@
     var line1=l1.join(' &nbsp;<span style="color:#E30613;">•</span>&nbsp; ');
     var l2=[]; if(d.email) l2.push(mailA(d.email,'#3A3A3A')); if(d.web) l2.push(webA(d.web,'#E30613',true));
     var line2=l2.join(' &nbsp;<span style="color:#E30613;">•</span>&nbsp; ');
-    var c='<div style="margin-bottom:14px;line-height:0;">'+logoImgs(d,150)+'</div>';
+    var c='<div style="margin-bottom:14px;line-height:0;">'+logoImgs(d,150,'h')+'</div>';
     if(d.name) c+='<div style="font-size:20px;font-weight:bold;color:#1A1A1A;letter-spacing:-0.3px;">'+esc(d.name)+'</div>';
     if(d.title) c+='<div style="font-size:12px;font-weight:bold;color:#E30613;text-transform:uppercase;letter-spacing:2px;padding-top:4px;padding-bottom:13px;">'+esc(d.title)+'</div>';
     if(line1) c+='<div style="font-size:12px;color:#3A3A3A;line-height:1.85;">'+line1+'</div>';
@@ -322,7 +328,7 @@
     if(d.title) info+='<div style="font-size:11.5px;font-weight:bold;color:#E30613;text-transform:uppercase;letter-spacing:1.5px;padding-top:3px;padding-bottom:'+(rows?'12px':'0')+';">'+esc(d.title)+'</div>';
     if(rows) info+='<table cellpadding="0" cellspacing="0" border="0" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#3A3A3A;line-height:1.95;">'+rows+'</table>';
     return '<table cellpadding="0" cellspacing="0" border="0" style="font-family:Arial,Helvetica,sans-serif;color:#1A1A1A;">'
-      +'<tr><td style="padding-bottom:12px;">'+logoImgs(d,140)+'</td></tr>'
+      +'<tr><td style="padding-bottom:12px;">'+logoImgs(d,140,'h')+'</td></tr>'
       +'<tr><td>'+info+'</td></tr></table>';
   }
 
@@ -342,7 +348,7 @@
       var right = d.address ? esc(d.address) : '';
       footer='<tr><td colspan="2" style="background:#E30613;padding:9px 26px;">'
         +'<table cellpadding="0" cellspacing="0" border="0" width="100%" style="font-family:Arial,Helvetica,sans-serif;"><tr>'
-        +'<td style="font-size:12px;color:#fff;font-weight:bold;letter-spacing:.3px;">'+left+'</td>'
+        +'<td style="font-size:12px;color:#fff;font-weight:bold;letter-spacing:.3px;padding-right:18px;white-space:nowrap;">'+left+'</td>'
         +'<td style="font-size:11px;color:#FBD3D5;text-align:right;">'+right+'</td>'
         +'</tr></table></td></tr>';
     }
