@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Gündoğu İnşaat — E-posta İmza Oluşturucu</title>
+<style>
+  :root{
+    --red:#E30613; --ink:#1A1A1A; --sub:#6B6B6B; --line:#E4E4E4; --bg:#ECEAE6; --card:#FFFFFF;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{background:var(--bg);font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:920px;margin:0 auto;padding:48px 28px 90px;}
+
+  header.page .kicker{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--red);font-weight:700;margin:0 0 10px;}
+  header.page h1{font-size:30px;line-height:1.15;font-weight:800;margin:0 0 14px;letter-spacing:-0.5px;}
+  header.page p{font-size:14px;line-height:1.6;color:var(--sub);margin:0;max-width:640px;}
+  .note{margin-top:22px;background:#fff;border:1px solid var(--line);border-left:3px solid var(--red);border-radius:8px;padding:14px 18px;font-size:12.5px;line-height:1.65;color:#444;max-width:700px;}
+  .note b{color:var(--ink);}
+  .note code{background:#F3F1ED;padding:1px 6px;border-radius:4px;font-size:11.5px;}
+
+  h2.step{font-size:13px;letter-spacing:.5px;text-transform:uppercase;color:var(--ink);font-weight:800;margin:46px 0 16px;display:flex;align-items:center;gap:10px;}
+  h2.step .n{font-size:12px;font-weight:800;color:#fff;background:var(--red);width:24px;height:24px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;flex:none;}
+
+  .panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:24px;box-shadow:0 1px 2px rgba(0,0,0,.04),0 12px 30px -22px rgba(0,0,0,.25);}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 20px;}
+  .field{display:flex;flex-direction:column;gap:6px;}
+  .field.full{grid-column:1 / -1;}
+  .field label{font-size:11.5px;font-weight:700;letter-spacing:.3px;color:#555;}
+  .field label .tag{color:#A6A29B;font-weight:500;text-transform:none;letter-spacing:0;}
+  .field input,.field textarea,.field select{font-family:inherit;font-size:13.5px;color:var(--ink);background:#fff;border:1px solid #D9D6D1;border-radius:8px;padding:10px 12px;outline:none;transition:border-color .15s,box-shadow .15s;width:100%;}
+  .field input:focus,.field textarea:focus,.field select:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(227,6,19,.10);}
+  .field textarea{resize:vertical;min-height:46px;line-height:1.5;}
+  .controls{display:flex;flex-wrap:wrap;gap:18px 28px;align-items:center;margin-top:20px;padding-top:18px;border-top:1px solid var(--line);}
+  .controls .field{min-width:210px;}
+  .check{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:600;color:var(--ink);cursor:pointer;user-select:none;}
+  .check input{width:17px;height:17px;accent-color:var(--red);cursor:pointer;}
+  .hint{font-size:12px;color:var(--sub);line-height:1.6;margin-top:14px;}
+
+  .opt{margin-top:18px;background:var(--card);border:2px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.04),0 12px 30px -24px rgba(0,0,0,.22);transition:border-color .15s,box-shadow .15s;}
+  .opt.selected{border-color:var(--red);box-shadow:0 0 0 3px rgba(227,6,19,.12),0 14px 32px -22px rgba(227,6,19,.45);}
+  .opt-bar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:13px 18px;border-bottom:1px solid var(--line);background:#FBFAF9;}
+  .opt-bar .label{display:flex;align-items:baseline;gap:11px;min-width:0;flex-wrap:wrap;}
+  .opt-bar .num{font-size:12px;font-weight:800;color:#fff;background:var(--ink);width:24px;height:24px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;flex:none;}
+  .opt.selected .opt-bar .num{background:var(--red);}
+  .opt-bar .name{font-size:15px;font-weight:700;}
+  .opt-bar .desc{font-size:12px;color:var(--sub);font-weight:400;}
+  .sel-btn{flex:none;display:inline-flex;align-items:center;gap:7px;cursor:pointer;font-family:inherit;font-size:12.5px;font-weight:700;color:var(--ink);background:#fff;border:1.5px solid #D9D6D1;border-radius:8px;padding:8px 14px;transition:all .15s;white-space:nowrap;}
+  .sel-btn:hover{border-color:var(--red);color:var(--red);}
+  .opt.selected .sel-btn{background:var(--red);border-color:var(--red);color:#fff;}
+  .sel-btn svg{width:14px;height:14px;}
+  .canvas{padding:30px;background:repeating-linear-gradient(45deg,#FCFBFA,#FCFBFA 10px,#F7F5F2 10px,#F7F5F2 20px);overflow:auto;}
+  .sheet{background:#fff;border:1px solid #EFEFEF;border-radius:8px;padding:26px 28px;display:inline-block;min-width:340px;box-shadow:0 1px 0 rgba(0,0,0,.03);}
+
+  .out-sheet{background:#fff;border:1px solid #EFEFEF;border-radius:10px;padding:30px;display:inline-block;min-width:340px;}
+  .out-actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:22px;}
+  .copy-btn{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-family:inherit;font-size:14px;font-weight:700;color:#fff;background:var(--ink);border:none;border-radius:9px;padding:13px 22px;transition:background .15s,transform .05s;}
+  .copy-btn:hover{background:var(--red);}
+  .copy-btn:active{transform:translateY(1px);}
+  .copy-btn.done{background:#1E8E4A;}
+  .copy-btn svg{width:16px;height:16px;}
+  .ghost-btn{display:inline-flex;align-items:center;gap:7px;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;color:var(--ink);background:#fff;border:1.5px solid #D9D6D1;border-radius:9px;padding:11px 16px;transition:all .15s;}
+  .ghost-btn:hover{border-color:var(--red);color:var(--red);}
+  .raw-wrap{margin-top:16px;display:none;}
+  .raw-wrap textarea{width:100%;min-height:150px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11.5px;line-height:1.5;color:#333;border:1px solid #D9D6D1;border-radius:8px;padding:12px;background:#FBFAF9;}
+  .steps{margin-top:18px;font-size:12.5px;color:#444;line-height:1.85;background:#FBFAF9;border:1px solid var(--line);border-radius:8px;padding:14px 18px;}
+  .steps b{color:var(--ink);}
+  footer.page{margin-top:56px;text-align:center;color:#9A958C;font-size:12px;letter-spacing:.3px;}
+  @media(max-width:680px){.grid{grid-template-columns:1fr;}.wrap{padding:32px 18px 70px;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="page">
+    <p class="kicker">Gündoğu İnşaat</p>
+    <h1>E-posta İmza Oluşturucu</h1>
+    <p>Bilgilerini gir, beğendiğin tasarımı seç, en alttan kopyala. Gmail / Outlook imza alanına yapıştırınca hazır. Logolar şirket sitesinde barındırıldığı için e-postalarda sorunsuz görünür.</p>
+    <div class="note">
+      <b>Hazır gelenler:</b> Sabit telefon ve adres <b>Diyarbakır Merkez Ofis</b> için dolu geldi — değiştirebilirsin. <b>Boş bıraktığın her alan imzada görünmez.</b> Logo renkleri: kırmızı <code>#E30613</code>, siyah <code>#1A1A1A</code>.
+    </div>
+  </header>
+
+  <!-- ============ STEP 1: FORM ============ -->
+  <h2 class="step"><span class="n">1</span> Bilgilerini Gir</h2>
+  <section class="panel">
+    <div class="grid">
+      <div class="field">
+        <label>Ad Soyad</label>
+        <input id="f-name" type="text" placeholder="Örn. Mehmet Yılmaz" autocomplete="off">
+      </div>
+      <div class="field">
+        <label>Ünvan / Pozisyon</label>
+        <input id="f-title" type="text" placeholder="Örn. Proje Müdürü" autocomplete="off">
+      </div>
+      <div class="field">
+        <label>Cep Telefonu <span class="tag">· isteğe bağlı</span></label>
+        <input id="f-cep" type="text" placeholder="+90 5xx xxx xx xx" autocomplete="off">
+      </div>
+      <div class="field">
+        <label>Sabit Telefon <span class="tag">· Diyarbakır merkez</span></label>
+        <input id="f-tel" type="text" value="+90 412 251 67 66" autocomplete="off">
+      </div>
+      <div class="field">
+        <label>E-posta <span class="tag">· isteğe bağlı</span></label>
+        <input id="f-email" type="text" placeholder="isim@gundoguinsaat.com" autocomplete="off">
+      </div>
+      <div class="field">
+        <label>Web Sitesi <span class="tag">· isteğe bağlı</span></label>
+        <input id="f-web" type="text" value="www.gundoguinsaat.com" autocomplete="off">
+      </div>
+      <div class="field full">
+        <label>Adres <span class="tag">· Diyarbakır merkez</span></label>
+        <textarea id="f-address">Peyas Mah. Selahaddin Eyyubi Bul. No: 35/1, Kayapınar / Diyarbakır</textarea>
+      </div>
+    </div>
+
+    <div class="controls">
+      <div class="field">
+        <label>Gündoğu Logosu</label>
+        <select id="f-logo">
+          <option value="clear">Şeffaf zemin (önerilen)</option>
+          <option value="white">Beyaz zemin</option>
+          <option value="cream">Krem (orijinal)</option>
+        </select>
+      </div>
+      <label class="check" style="margin-top:20px;">
+        <input id="f-meso" type="checkbox">
+        İş ortağı <b style="margin:0 3px;">MESOGEOS</b> logosunu da ekle
+      </label>
+    </div>
+    <p class="hint">İmza önizlemeleri yazdıkça anında güncellenir. Sadece doldurduğun alanlar imzada yer alır.</p>
+  </section>
+
+  <!-- ============ STEP 2: OPTIONS ============ -->
+  <h2 class="step"><span class="n">2</span> Bir Tasarım Seç</h2>
+
+  <section class="opt" id="opt1">
+    <div class="opt-bar">
+      <div class="label"><span class="num">1</span><span class="name">Yatay Kurumsal</span><span class="desc">Logo solda · kırmızı ayraç · bilgiler sağda</span></div>
+      <button class="sel-btn" id="selbtn1" onclick="selectOpt(1,true)">Bu tasarımı seç</button>
+    </div>
+    <div class="canvas"><div class="sheet"><div id="prev1"></div></div></div>
+  </section>
+
+  <section class="opt" id="opt2">
+    <div class="opt-bar">
+      <div class="label"><span class="num">2</span><span class="name">Sade Minimal</span><span class="desc">Logo üstte · tek satır iletişim · çok temiz</span></div>
+      <button class="sel-btn" id="selbtn2" onclick="selectOpt(2,true)">Bu tasarımı seç</button>
+    </div>
+    <div class="canvas"><div class="sheet"><div id="prev2"></div></div></div>
+  </section>
+
+  <section class="opt" id="opt3">
+    <div class="opt-bar">
+      <div class="label"><span class="num">3</span><span class="name">Kırmızı Vurgulu</span><span class="desc">Sol kırmızı şerit · büyük isim · nokta ayraçlı</span></div>
+      <button class="sel-btn" id="selbtn3" onclick="selectOpt(3,true)">Bu tasarımı seç</button>
+    </div>
+    <div class="canvas"><div class="sheet"><div id="prev3"></div></div></div>
+  </section>
+
+  <section class="opt" id="opt4">
+    <div class="opt-bar">
+      <div class="label"><span class="num">4</span><span class="name">Dikey Kompakt</span><span class="desc">Kırmızı kare madde işaretli · dar alanlara ideal</span></div>
+      <button class="sel-btn" id="selbtn4" onclick="selectOpt(4,true)">Bu tasarımı seç</button>
+    </div>
+    <div class="canvas"><div class="sheet"><div id="prev4"></div></div></div>
+  </section>
+
+  <section class="opt" id="opt5">
+    <div class="opt-bar">
+      <div class="label"><span class="num">5</span><span class="name">Kartlı / Footer Şeritli</span><span class="desc">Gri panel · altta kırmızı web şeridi</span></div>
+      <button class="sel-btn" id="selbtn5" onclick="selectOpt(5,true)">Bu tasarımı seç</button>
+    </div>
+    <div class="canvas"><div class="sheet" style="padding:0;border:none;"><div id="prev5"></div></div></div>
+  </section>
+
+  <!-- ============ STEP 3: OUTPUT ============ -->
+  <h2 class="step" id="output"><span class="n">3</span> İmzanı Kopyala</h2>
+  <section class="panel">
+    <div style="font-size:13px;color:#555;">Seçilen tasarım: <b id="sel-name" style="color:#1A1A1A;">Yatay Kurumsal</b></div>
+    <div class="canvas" style="border-radius:10px;margin-top:14px;"><div class="out-sheet"><div id="final-sig"></div></div></div>
+    <div class="out-actions">
+      <button class="copy-btn" id="copybtn" onclick="copyFinal(this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        İmzayı Kopyala
+      </button>
+      <button class="ghost-btn" onclick="toggleRaw(this)">&lt;/&gt; HTML kodunu göster</button>
+    </div>
+    <div class="raw-wrap" id="rawwrap">
+      <textarea id="raw-html" readonly onclick="this.select()"></textarea>
+      <button class="ghost-btn" style="margin-top:10px;" onclick="copyRaw(this)">Kodu kopyala</button>
+    </div>
+    <div class="steps">
+      <b>Gmail'e nasıl eklenir?</b><br>
+      1) Yukarıdaki <b>İmzayı Kopyala</b>'ya bas. &nbsp;2) Gmail → Ayarlar ⚙ → <b>Tüm ayarları gör</b> → <b>İmza</b> bölümüne in. &nbsp;3) Yeni imza oluştur, kutuya <b>Ctrl/Cmd + V</b> ile yapıştır → en altta <b>Değişiklikleri kaydet</b>.
+    </div>
+  </section>
+
+  <footer class="page">Gündoğu İnşaat · Kurumsal E-posta İmza Sistemi</footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var BASE = "https://gundoguinsaat.com/logo/";
+  var LOGOS = { clear: BASE+"gundogu-logo-clear.png", white: BASE+"gundogu-logo.png", cream: BASE+"gundogu-logo-cream.png" };
+  var MESO  = BASE+"mesogeos-logo-clear.png";
+  var OPT_NAMES = {1:"Yatay Kurumsal",2:"Sade Minimal",3:"Kırmızı Vurgulu",4:"Dikey Kompakt",5:"Kartlı / Footer Şeritli"};
+  var CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>';
+  var selectedOpt = 1;
+
+  function $(id){ return document.getElementById(id); }
+  function val(id){ var e=$(id); return e?e.value:""; }
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function telHref(s){ return 'tel:'+String(s).replace(/[^\d+]/g,''); }
+  function webParts(s){
+    s=(s||'').trim(); if(!s) return null;
+    var href = /^https?:\/\//i.test(s) ? s : 'https://'+s;
+    var disp = s.replace(/^https?:\/\//i,'');
+    return { href:esc(href), disp:esc(disp) };
+  }
+
+  function getData(){
+    return {
+      name: val('f-name').trim(),
+      title: val('f-title').trim(),
+      cep: val('f-cep').trim(),
+      tel: val('f-tel').trim(),
+      email: val('f-email').trim(),
+      web: webParts(val('f-web')),
+      address: val('f-address').trim(),
+      logo: LOGOS[ val('f-logo') ] || LOGOS.clear,
+      meso: $('f-meso').checked ? MESO : null
+    };
+  }
+
+  // Gündoğu logo + optional MESOGEOS stacked beneath with a thin divider
+  function logoImgs(d, w){
+    var s = '<img src="'+d.logo+'" alt="Gündoğu İnşaat" width="'+w+'" style="display:block;border:0;">';
+    if(d.meso){
+      var mw = Math.round(w*0.94);
+      s += '<div style="border-top:1px solid #E4E4E4;margin-top:12px;padding-top:12px;line-height:0;">'
+         + '<img src="'+d.meso+'" alt="MESOGEOS" width="'+mw+'" style="display:block;border:0;"></div>';
+    }
+    return s;
+  }
+  function mailA(e,color){ return '<a href="mailto:'+esc(e)+'" style="color:'+color+';text-decoration:none;">'+esc(e)+'</a>'; }
+  function webA(w,color,bold){ return '<a href="'+w.href+'" style="color:'+color+';text-decoration:none;'+(bold?'font-weight:bold;':'')+'">'+w.disp+'</a>'; }
+
+  // ---- Option 1: Yatay Kurumsal ----
+  function sig1(d){
+    var rows='';
+    function row(l,v){ return '<tr><td style="color:#9A9A9A;padding-right:10px;vertical-align:top;">'+l+'</td><td>'+v+'</td></tr>'; }
+    if(d.cep) rows+=row('Cep', esc(d.cep));
+    if(d.tel) rows+=row('Tel', esc(d.tel));
+    if(d.email) rows+=row('E-posta', mailA(d.email,'#3A3A3A'));
+    if(d.web) rows+=row('Web', webA(d.web,'#E30613',true));
+    if(d.address) rows+=row('Adres', esc(d.address));
+    var info='';
+    if(d.name) info+='<div style="font-size:17px;font-weight:bold;color:#1A1A1A;letter-spacing:.2px;">'+esc(d.name)+'</div>';
+    if(d.title) info+='<div style="font-size:11.5px;font-weight:bold;color:#E30613;text-transform:uppercase;letter-spacing:1.5px;padding-top:3px;padding-bottom:'+(rows?'11px':'0')+';">'+esc(d.title)+'</div>';
+    if(rows) info+='<table cellpadding="0" cellspacing="0" border="0" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#3A3A3A;line-height:1.9;">'+rows+'</table>';
+    return '<table cellpadding="0" cellspacing="0" border="0" style="font-family:Arial,Helvetica,sans-serif;color:#1A1A1A;">'
+      +'<tr><td style="vertical-align:middle;padding-right:22px;border-right:2px solid #E30613;">'+logoImgs(d,155)+'</td>'
+      +'<td style="vertical-align:middle;padding-left:22px;">'+info+'</td></tr></table>';
+  }
+
+  // ---- Option 2: Sade Minimal ----
+  function sig2(d){
+    var items=[];
+    if(d.cep) items.push('<a href="'+telHref(d.cep)+'" style="color:#3A3A3A;text-decoration:none;">'+esc(d.cep)+'</a>');
+    if(d.tel) items.push('<a href="'+telHref(d.tel)+'" style="color:#3A3A3A;text-decoration:none;">'+esc(d.tel)+'</a>');
+    if(d.email) items.push(mailA(d.email,'#3A3A3A'));
+    if(d.web) items.push(webA(d.web,'#1A1A1A',true));
+    var line = items.join('<span style="color:#E30613;padding:0 8px;">|</span>');
+    var nameLine='';
+    if(d.name||d.title){
+      nameLine='<div style="font-size:15px;font-weight:bold;color:#1A1A1A;">';
+      if(d.name) nameLine+=esc(d.name);
+      if(d.name&&d.title) nameLine+='<span style="font-weight:normal;color:#9A9A9A;">&nbsp;&nbsp;·&nbsp;&nbsp;</span>';
+      if(d.title) nameLine+='<span style="font-size:12.5px;color:#E30613;font-weight:bold;">'+esc(d.title)+'</span>';
+      nameLine+='</div>';
+    }
+    var contact = line ? '<div style="font-size:12px;color:#3A3A3A;line-height:1.7;padding-top:9px;">'+line+'</div>' : '';
+    var addr = d.address ? '<div style="font-size:11.5px;color:#9A9A9A;line-height:1.7;padding-top:4px;">'+esc(d.address)+'</div>' : '';
+    return '<table cellpadding="0" cellspacing="0" border="0" style="font-family:Arial,Helvetica,sans-serif;color:#1A1A1A;">'
+      +'<tr><td style="padding-bottom:14px;">'+logoImgs(d,180)+'</td></tr>'
+      +'<tr><td style="border-top:1px solid #E4E4E4;padding-top:13px;">'+nameLine+contact+addr+'</td></tr></table>';
+  }
+
+  // ---- Option 3: Kırmızı Vurgulu ----
+  function sig3(d){
+    var l1=[]; if(d.cep) l1.push('<span style="color:#9A9A9A;">Cep</span>&nbsp; '+esc(d.cep)); if(d.tel) l1.push('<span style="color:#9A9A9A;">Tel</span>&nbsp; '+esc(d.tel));
+    var line1=l1.join(' &nbsp;<span style="color:#E30613;">•</span>&nbsp; ');
+    var l2=[]; if(d.email) l2.push(mailA(d.email,'#3A3A3A')); if(d.web) l2.push(webA(d.web,'#E30613',true));
+    var line2=l2.join(' &nbsp;<span style="color:#E30613;">•</span>&nbsp; ');
+    var c='<div style="margin-bottom:14px;line-height:0;">'+logoImgs(d,150)+'</div>';
+    if(d.name) c+='<div style="font-size:20px;font-weight:bold;color:#1A1A1A;letter-spacing:-0.3px;">'+esc(d.name)+'</div>';
+    if(d.title) c+='<div style="font-size:12px;font-weight:bold;color:#E30613;text-transform:uppercase;letter-spacing:2px;padding-top:4px;padding-bottom:13px;">'+esc(d.title)+'</div>';
+    if(line1) c+='<div style="font-size:12px;color:#3A3A3A;line-height:1.85;">'+line1+'</div>';
+    if(line2) c+='<div style="font-size:12px;color:#3A3A3A;line-height:1.85;">'+line2+'</div>';
+    if(d.address) c+='<div style="font-size:11.5px;color:#9A9A9A;line-height:1.85;padding-top:2px;">'+esc(d.address)+'</div>';
+    return '<table cellpadding="0" cellspacing="0" border="0" style="font-family:Arial,Helvetica,sans-serif;color:#1A1A1A;">'
+      +'<tr><td style="background:#E30613;width:5px;font-size:0;line-height:0;">&nbsp;</td>'
+      +'<td style="padding:2px 0 2px 20px;">'+c+'</td></tr></table>';
+  }
+
+  // ---- Option 4: Dikey Kompakt ----
+  function sig4(d){
+    function brow(v,top){ return '<tr><td style="vertical-align:'+(top?'top':'middle')+';padding-right:9px;'+(top?'padding-top:6px;':'')+'"><span style="display:inline-block;width:6px;height:6px;background:#E30613;"></span></td><td>'+v+'</td></tr>'; }
+    var rows='';
+    if(d.cep) rows+=brow(esc(d.cep));
+    if(d.tel) rows+=brow(esc(d.tel));
+    if(d.email) rows+=brow(mailA(d.email,'#3A3A3A'));
+    if(d.web) rows+=brow(webA(d.web,'#E30613',true));
+    if(d.address) rows+=brow(esc(d.address),true);
+    var info='';
+    if(d.name) info+='<div style="font-size:16px;font-weight:bold;color:#1A1A1A;">'+esc(d.name)+'</div>';
+    if(d.title) info+='<div style="font-size:11.5px;font-weight:bold;color:#E30613;text-transform:uppercase;letter-spacing:1.5px;padding-top:3px;padding-bottom:'+(rows?'12px':'0')+';">'+esc(d.title)+'</div>';
+    if(rows) info+='<table cellpadding="0" cellspacing="0" border="0" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#3A3A3A;line-height:1.95;">'+rows+'</table>';
+    return '<table cellpadding="0" cellspacing="0" border="0" style="font-family:Arial,Helvetica,sans-serif;color:#1A1A1A;">'
+      +'<tr><td style="padding-bottom:12px;">'+logoImgs(d,140)+'</td></tr>'
+      +'<tr><td>'+info+'</td></tr></table>';
+  }
+
+  // ---- Option 5: Kartlı / Footer Şeritli ----
+  function sig5(d){
+    var body='';
+    if(d.name) body+='<div style="font-size:17px;font-weight:bold;color:#1A1A1A;">'+esc(d.name)+'</div>';
+    if(d.title) body+='<div style="font-size:11.5px;font-weight:bold;color:#E30613;text-transform:uppercase;letter-spacing:1.5px;padding-top:3px;padding-bottom:11px;">'+esc(d.title)+'</div>';
+    var lines=[];
+    if(d.cep) lines.push('<span style="color:#9A9A9A;">Cep&nbsp;</span> '+esc(d.cep));
+    if(d.tel) lines.push('<span style="color:#9A9A9A;">Tel&nbsp;&nbsp;</span> '+esc(d.tel));
+    if(d.email) lines.push('<span style="color:#9A9A9A;">E-posta&nbsp;</span> '+mailA(d.email,'#3A3A3A'));
+    if(lines.length) body+='<div style="font-size:12px;color:#3A3A3A;line-height:1.85;">'+lines.join('<br>')+'</div>';
+    var footer='';
+    if(d.web || d.address){
+      var left = d.web ? '<a href="'+d.web.href+'" style="color:#fff;text-decoration:none;">'+d.web.disp+'</a>' : '';
+      var right = d.address ? esc(d.address) : '';
+      footer='<tr><td colspan="2" style="background:#E30613;padding:9px 26px;">'
+        +'<table cellpadding="0" cellspacing="0" border="0" width="100%" style="font-family:Arial,Helvetica,sans-serif;"><tr>'
+        +'<td style="font-size:12px;color:#fff;font-weight:bold;letter-spacing:.3px;">'+left+'</td>'
+        +'<td style="font-size:11px;color:#FBD3D5;text-align:right;">'+right+'</td>'
+        +'</tr></table></td></tr>';
+    }
+    return '<table cellpadding="0" cellspacing="0" border="0" style="font-family:Arial,Helvetica,sans-serif;color:#1A1A1A;border:1px solid #E4E4E4;border-radius:8px;overflow:hidden;">'
+      +'<tr><td style="vertical-align:middle;background:#F7F5F2;padding:24px 26px;border-right:1px solid #E9E7E3;">'+logoImgs(d,150)+'</td>'
+      +'<td style="vertical-align:middle;padding:22px 26px;">'+body+'</td></tr>'+footer+'</table>';
+  }
+
+  function buildSig(opt,d){ return ({1:sig1,2:sig2,3:sig3,4:sig4,5:sig5})[opt](d); }
+
+  function render(){
+    var d=getData();
+    for(var i=1;i<=5;i++){ $('prev'+i).innerHTML = buildSig(i,d); }
+    var html = buildSig(selectedOpt,d);
+    $('final-sig').innerHTML = html;
+    $('raw-html').value = html;
+    $('sel-name').textContent = OPT_NAMES[selectedOpt];
+  }
+
+  window.selectOpt = function(n,scroll){
+    selectedOpt=n;
+    for(var i=1;i<=5;i++){
+      var card=$('opt'+i), btn=$('selbtn'+i);
+      if(i===n){ card.classList.add('selected'); btn.innerHTML=CHECK+' Seçildi'; }
+      else { card.classList.remove('selected'); btn.innerHTML='Bu tasarımı seç'; }
+    }
+    render();
+    if(scroll){ $('output').scrollIntoView({behavior:'smooth',block:'start'}); }
+  };
+
+  window.copyFinal = function(btn){
+    var node=$('final-sig');
+    var range=document.createRange(); range.selectNode(node);
+    var sel=window.getSelection(); sel.removeAllRanges(); sel.addRange(range);
+    var ok=false; try{ ok=document.execCommand('copy'); }catch(e){ ok=false; }
+    sel.removeAllRanges();
+    var orig='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> İmzayı Kopyala';
+    if(ok){ btn.classList.add('done'); btn.innerHTML=CHECK+' Kopyalandı!'; }
+    else { btn.innerHTML='Manuel seçip kopyala'; }
+    setTimeout(function(){ btn.classList.remove('done'); btn.innerHTML=orig; },2100);
+  };
+
+  window.copyRaw = function(btn){
+    var ta=$('raw-html'); ta.select();
+    var ok=false; try{ ok=document.execCommand('copy'); }catch(e){}
+    var orig=btn.textContent; btn.textContent = ok?'Kopyalandı!':'Manuel seçin';
+    setTimeout(function(){ btn.textContent=orig; },1800);
+  };
+
+  window.toggleRaw = function(btn){
+    var w=$('rawwrap'); var show = w.style.display!=='block';
+    w.style.display = show?'block':'none';
+    btn.innerHTML = show ? '&lt;/&gt; HTML kodunu gizle' : '&lt;/&gt; HTML kodunu göster';
+  };
+
+  // live updates
+  ['f-name','f-title','f-cep','f-tel','f-email','f-web','f-address','f-logo','f-meso'].forEach(function(id){
+    var e=$(id); var ev=(id==='f-meso'||id==='f-logo')?'change':'input';
+    e.addEventListener(ev, render);
+  });
+
+  selectOpt(1,false);
+})();
+</script>
+</body>
+</html>
