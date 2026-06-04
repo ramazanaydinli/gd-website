@@ -253,7 +253,7 @@
   // ---- Option 1: Yatay Kurumsal ----
   function sig1(d){
     var rows='';
-    function row(l,v){ return '<tr><td style="color:#9A9A9A;padding-right:10px;vertical-align:top;">'+l+'</td><td>'+v+'</td></tr>'; }
+    function row(l,v){ return '<tr><td style="color:#9A9A9A;padding-right:10px;vertical-align:top;white-space:nowrap;">'+l+'</td><td>'+v+'</td></tr>'; }
     if(d.cep) rows+=row('Cep', esc(d.cep));
     if(d.tel) rows+=row('Tel', esc(d.tel));
     if(d.email) rows+=row('E-posta', mailA(d.email,'#3A3A3A'));
