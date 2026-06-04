@@ -38,6 +38,8 @@
   .check{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:600;color:var(--ink);cursor:pointer;user-select:none;}
   .check input{width:17px;height:17px;accent-color:var(--red);cursor:pointer;}
   .hint{font-size:12px;color:var(--sub);line-height:1.6;margin-top:14px;}
+  .repwrap{margin-top:18px;padding-top:16px;border-top:1px dashed var(--line);}
+  .rep-hd{font-size:11.5px;font-weight:800;color:var(--red);letter-spacing:.4px;text-transform:uppercase;margin-bottom:12px;}
 
   .opt{margin-top:18px;background:var(--card);border:2px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.04),0 12px 30px -24px rgba(0,0,0,.22);transition:border-color .15s,box-shadow .15s;}
   .opt.selected{border-color:var(--red);box-shadow:0 0 0 3px rgba(227,6,19,.12),0 14px 32px -22px rgba(227,6,19,.45);}
@@ -79,7 +81,9 @@
     <h1>E-posta İmza Oluşturucu</h1>
     <p>Bilgilerini gir, beğendiğin tasarımı seç, en alttan kopyala. Gmail / Outlook imza alanına yapıştırınca hazır. Logolar şirket sitesinde barındırıldığı için e-postalarda sorunsuz görünür.</p>
     <div class="note">
-      <b>Hazır gelenler:</b> Sabit telefon ve adres <b>Diyarbakır Merkez Ofis</b> için dolu geldi — değiştirebilirsin. <b>Boş bıraktığın her alan imzada görünmez.</b> Logo renkleri: kırmızı <code>#E30613</code>, siyah <code>#1A1A1A</code>.
+      <b>Hazır gelenler:</b> Sabit telefon ve adres <b>Diyarbakır Merkez Ofis</b> için dolu geldi — değiştirebilirsin.<br>
+      <b>Boş bıraktığın alanlar imzada görünmez.</b><br>
+      Logo renkleri: kırmızı <code>#E30613</code>, siyah <code>#1A1A1A</code>.
     </div>
   </header>
 
@@ -145,6 +149,20 @@
         <input id="f-onbehalf" type="checkbox">
         <span>“Adına / On behalf of” satırı</span>
       </label>
+    </div>
+
+    <div class="repwrap" id="repwrap" style="display:none;">
+      <div class="rep-hd">Adına / On behalf of — temsil edilen kişi</div>
+      <div class="grid">
+        <div class="field">
+          <label>Temsilci Adı</label>
+          <input id="f-repname" type="text" value="Mr. Savaş BİRGİLİ" autocomplete="off">
+        </div>
+        <div class="field">
+          <label>Temsilci Ünvanı</label>
+          <input id="f-reptitle" type="text" value="Mesogeos-Gündoğu J.V. Representative" autocomplete="off">
+        </div>
+      </div>
     </div>
     <p class="hint">Önizlemeler anında güncellenir; boş alanlar imzada görünmez. <b>MESOGEOS</b> seçilince iki logo + iş ortaklığının (JV) tam yasal adı eklenir. <b>İmza Dili</b> etiketleri (Cep/Tel/Faks…) ve JV metnini Türkçe/İngilizce yapar.</p>
   </section>
@@ -263,7 +281,9 @@
       address: val('f-address').trim(),
       logo: LOGOS[ val('f-logo') ] || LOGOS.clear,
       meso: $('f-meso').checked ? MESO : null,
-      onbehalf: $('f-onbehalf').checked
+      onbehalf: $('f-onbehalf').checked,
+      repName: val('f-repname').trim(),
+      repTitle: val('f-reptitle').trim()
     };
   }
 
@@ -285,8 +305,15 @@
   }
   function mailA(e,color){ return '<a href="mailto:'+esc(e)+'" style="color:'+color+';text-decoration:none;">'+esc(e)+'</a>'; }
   function webA(w,color,bold){ return '<a href="'+w.href+'" style="color:'+color+';text-decoration:none;'+(bold?'font-weight:bold;':'')+'">'+w.disp+'</a>'; }
-  function onBehalf(d){ return d.onbehalf ? '<div style="font-size:11.5px;color:#555555;padding-bottom:5px;">'+d.t.onbehalf+'</div>' : ''; }
-  function jvBlock(d){ return d.meso ? '<div style="font-size:11px;font-weight:bold;color:#2B2B2B;line-height:1.5;padding:1px 0 9px;">'+d.t.jv+'</div>' : ''; }
+  // Sender block is rendered first; repBlock adds the "On behalf of" + represented person below it.
+  function repBlock(d, ns, ts){
+    if(!d.onbehalf) return '';
+    var s='<div style="font-size:11.5px;color:#555555;padding:9px 0 5px;">'+d.t.onbehalf+'</div>';
+    if(d.repName) s+='<div style="'+ns+'">'+esc(d.repName)+'</div>';
+    if(d.repTitle) s+='<div style="'+ts+'">'+esc(d.repTitle)+'</div>';
+    return s;
+  }
+  function jvBlock(d){ return d.meso ? '<div style="font-size:11px;font-weight:bold;color:#2B2B2B;line-height:1.5;padding:9px 0 0;">'+d.t.jv+'</div>' : ''; }
 
   // ---- Option 1: Yatay Kurumsal ----
   function sig1(d){
@@ -298,11 +325,13 @@
     if(d.email) rows+=row(d.t.email, mailA(d.email,'#3A3A3A'));
     if(d.web) rows+=row(d.t.web, webA(d.web,'#E30613',true));
     if(d.address) rows+=row(d.t.adres, esc(d.address));
-    var info=onBehalf(d);
-    if(d.name) info+='<div style="font-size:17px;font-weight:bold;color:#1A1A1A;letter-spacing:.2px;">'+esc(d.name)+'</div>';
-    if(d.title) info+='<div style="font-size:11.5px;font-weight:bold;color:#E30613;letter-spacing:0.3px;padding-top:3px;padding-bottom:'+((d.meso||rows)?'9px':'0')+';">'+esc(d.title)+'</div>';
-    info+=jvBlock(d);
-    if(rows) info+='<table cellpadding="0" cellspacing="0" border="0" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#3A3A3A;line-height:1.9;">'+rows+'</table>';
+    var ns='font-size:17px;font-weight:bold;color:#1A1A1A;letter-spacing:.2px;';
+    var ts='font-size:11.5px;font-weight:bold;color:#E30613;letter-spacing:0.3px;padding-top:3px;';
+    var info='';
+    if(d.name) info+='<div style="'+ns+'">'+esc(d.name)+'</div>';
+    if(d.title) info+='<div style="'+ts+'">'+esc(d.title)+'</div>';
+    info+=repBlock(d,ns,ts)+jvBlock(d);
+    if(rows) info+='<div style="padding-top:9px;"><table cellpadding="0" cellspacing="0" border="0" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#3A3A3A;line-height:1.9;">'+rows+'</table></div>';
     return '<table cellpadding="0" cellspacing="0" border="0" style="font-family:Arial,Helvetica,sans-serif;color:#1A1A1A;">'
       +'<tr><td style="vertical-align:middle;padding-right:22px;border-right:2px solid #E30613;">'+logoImgs(d,155)+'</td>'
       +'<td style="vertical-align:middle;padding-left:22px;">'+info+'</td></tr></table>';
@@ -317,19 +346,21 @@
     if(d.email) items.push(mailA(d.email,'#3A3A3A'));
     if(d.web) items.push(webA(d.web,'#1A1A1A',true));
     var line = items.join('<span style="color:#E30613;padding:0 8px;">|</span>');
-    var nameLine='';
-    if(d.name||d.title){
-      nameLine='<div style="font-size:15px;font-weight:bold;color:#1A1A1A;">';
-      if(d.name) nameLine+=esc(d.name);
-      if(d.name&&d.title) nameLine+='<span style="font-weight:normal;color:#9A9A9A;">&nbsp;&nbsp;·&nbsp;&nbsp;</span>';
-      if(d.title) nameLine+='<span style="font-size:12.5px;color:#E30613;font-weight:bold;">'+esc(d.title)+'</span>';
-      nameLine+='</div>';
+    function nt(name,title){
+      if(!name&&!title) return '';
+      var s='<div style="font-size:15px;font-weight:bold;color:#1A1A1A;">';
+      if(name) s+=esc(name);
+      if(name&&title) s+='<span style="font-weight:normal;color:#9A9A9A;">&nbsp;&nbsp;·&nbsp;&nbsp;</span>';
+      if(title) s+='<span style="font-size:12.5px;color:#E30613;font-weight:bold;">'+esc(title)+'</span>';
+      return s+'</div>';
     }
+    var people=nt(d.name,d.title);
+    if(d.onbehalf && (d.repName||d.repTitle)) people+='<div style="font-size:11.5px;color:#555555;padding:9px 0 5px;">'+d.t.onbehalf+'</div>'+nt(d.repName,d.repTitle);
     var contact = line ? '<div style="font-size:12px;color:#3A3A3A;line-height:1.7;padding-top:9px;">'+line+'</div>' : '';
     var addr = d.address ? '<div style="font-size:11.5px;color:#9A9A9A;line-height:1.7;padding-top:4px;">'+esc(d.address)+'</div>' : '';
     return '<table cellpadding="0" cellspacing="0" border="0" style="font-family:Arial,Helvetica,sans-serif;color:#1A1A1A;">'
       +'<tr><td style="padding-bottom:14px;">'+logoImgs(d,180,'h')+'</td></tr>'
-      +'<tr><td style="border-top:1px solid #E4E4E4;padding-top:13px;">'+onBehalf(d)+nameLine+jvBlock(d)+contact+addr+'</td></tr></table>';
+      +'<tr><td style="border-top:1px solid #E4E4E4;padding-top:13px;">'+people+jvBlock(d)+contact+addr+'</td></tr></table>';
   }
 
   // ---- Option 3: Kırmızı Vurgulu ----
@@ -341,13 +372,17 @@
     var line1=l1.join(' &nbsp;<span style="color:#E30613;">•</span>&nbsp; ');
     var l2=[]; if(d.email) l2.push(mailA(d.email,'#3A3A3A')); if(d.web) l2.push(webA(d.web,'#E30613',true));
     var line2=l2.join(' &nbsp;<span style="color:#E30613;">•</span>&nbsp; ');
-    var c='<div style="margin-bottom:14px;line-height:0;">'+logoImgs(d,150,'h')+'</div>'+onBehalf(d);
-    if(d.name) c+='<div style="font-size:20px;font-weight:bold;color:#1A1A1A;letter-spacing:-0.3px;">'+esc(d.name)+'</div>';
-    if(d.title) c+='<div style="font-size:12px;font-weight:bold;color:#E30613;letter-spacing:0.3px;padding-top:4px;padding-bottom:'+(d.meso?'8px':'13px')+';">'+esc(d.title)+'</div>';
-    c+=jvBlock(d);
-    if(line1) c+='<div style="font-size:12px;color:#3A3A3A;line-height:1.85;">'+line1+'</div>';
-    if(line2) c+='<div style="font-size:12px;color:#3A3A3A;line-height:1.85;">'+line2+'</div>';
-    if(d.address) c+='<div style="font-size:11.5px;color:#9A9A9A;line-height:1.85;padding-top:2px;">'+esc(d.address)+'</div>';
+    var ns='font-size:20px;font-weight:bold;color:#1A1A1A;letter-spacing:-0.3px;';
+    var ts='font-size:12px;font-weight:bold;color:#E30613;letter-spacing:0.3px;padding-top:4px;';
+    var c='<div style="margin-bottom:14px;line-height:0;">'+logoImgs(d,150,'h')+'</div>';
+    if(d.name) c+='<div style="'+ns+'">'+esc(d.name)+'</div>';
+    if(d.title) c+='<div style="'+ts+'">'+esc(d.title)+'</div>';
+    c+=repBlock(d,ns,ts)+jvBlock(d);
+    var cc='';
+    if(line1) cc+='<div style="font-size:12px;color:#3A3A3A;line-height:1.85;">'+line1+'</div>';
+    if(line2) cc+='<div style="font-size:12px;color:#3A3A3A;line-height:1.85;">'+line2+'</div>';
+    if(d.address) cc+='<div style="font-size:11.5px;color:#9A9A9A;line-height:1.85;padding-top:2px;">'+esc(d.address)+'</div>';
+    if(cc) c+='<div style="padding-top:9px;">'+cc+'</div>';
     return '<table cellpadding="0" cellspacing="0" border="0" style="font-family:Arial,Helvetica,sans-serif;color:#1A1A1A;">'
       +'<tr><td style="background:#E30613;width:5px;font-size:0;line-height:0;">&nbsp;</td>'
       +'<td style="padding:2px 0 2px 20px;">'+c+'</td></tr></table>';
@@ -363,11 +398,13 @@
     if(d.email) rows+=brow(mailA(d.email,'#3A3A3A'));
     if(d.web) rows+=brow(webA(d.web,'#E30613',true));
     if(d.address) rows+=brow(esc(d.address),true);
-    var info=onBehalf(d);
-    if(d.name) info+='<div style="font-size:16px;font-weight:bold;color:#1A1A1A;">'+esc(d.name)+'</div>';
-    if(d.title) info+='<div style="font-size:11.5px;font-weight:bold;color:#E30613;letter-spacing:0.3px;padding-top:3px;padding-bottom:'+((d.meso||rows)?'10px':'0')+';">'+esc(d.title)+'</div>';
-    info+=jvBlock(d);
-    if(rows) info+='<table cellpadding="0" cellspacing="0" border="0" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#3A3A3A;line-height:1.95;">'+rows+'</table>';
+    var ns='font-size:16px;font-weight:bold;color:#1A1A1A;';
+    var ts='font-size:11.5px;font-weight:bold;color:#E30613;letter-spacing:0.3px;padding-top:3px;';
+    var info='';
+    if(d.name) info+='<div style="'+ns+'">'+esc(d.name)+'</div>';
+    if(d.title) info+='<div style="'+ts+'">'+esc(d.title)+'</div>';
+    info+=repBlock(d,ns,ts)+jvBlock(d);
+    if(rows) info+='<div style="padding-top:9px;"><table cellpadding="0" cellspacing="0" border="0" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#3A3A3A;line-height:1.95;">'+rows+'</table></div>';
     return '<table cellpadding="0" cellspacing="0" border="0" style="font-family:Arial,Helvetica,sans-serif;color:#1A1A1A;">'
       +'<tr><td style="padding-bottom:12px;">'+logoImgs(d,140,'h')+'</td></tr>'
       +'<tr><td>'+info+'</td></tr></table>';
@@ -375,16 +412,18 @@
 
   // ---- Option 5: Kartlı / Footer Şeritli ----
   function sig5(d){
-    var body=onBehalf(d);
-    if(d.name) body+='<div style="font-size:17px;font-weight:bold;color:#1A1A1A;">'+esc(d.name)+'</div>';
-    if(d.title) body+='<div style="font-size:11.5px;font-weight:bold;color:#E30613;letter-spacing:0.3px;padding-top:3px;padding-bottom:'+(d.meso?'7px':'11px')+';">'+esc(d.title)+'</div>';
-    body+=jvBlock(d);
+    var ns='font-size:17px;font-weight:bold;color:#1A1A1A;';
+    var ts='font-size:11.5px;font-weight:bold;color:#E30613;letter-spacing:0.3px;padding-top:3px;';
+    var body='';
+    if(d.name) body+='<div style="'+ns+'">'+esc(d.name)+'</div>';
+    if(d.title) body+='<div style="'+ts+'">'+esc(d.title)+'</div>';
+    body+=repBlock(d,ns,ts)+jvBlock(d);
     var lines=[];
     if(d.cep) lines.push('<span style="color:#9A9A9A;">'+d.t.cep+'&nbsp;</span> '+esc(d.cep));
     if(d.tel) lines.push('<span style="color:#9A9A9A;">'+d.t.tel+'&nbsp;&nbsp;</span> '+esc(d.tel));
     if(d.fax) lines.push('<span style="color:#9A9A9A;">'+d.t.fax+'&nbsp;</span> '+esc(d.fax));
     if(d.email) lines.push('<span style="color:#9A9A9A;">'+d.t.email+'&nbsp;</span> '+mailA(d.email,'#3A3A3A'));
-    if(lines.length) body+='<div style="font-size:12px;color:#3A3A3A;line-height:1.85;">'+lines.join('<br>')+'</div>';
+    if(lines.length) body+='<div style="font-size:12px;color:#3A3A3A;line-height:1.85;padding-top:9px;">'+lines.join('<br>')+'</div>';
     var footer='';
     if(d.web || d.address){
       var left = d.web ? '<a href="'+d.web.href+'" style="color:#fff;text-decoration:none;">'+d.web.disp+'</a>' : '';
@@ -404,7 +443,8 @@
 
   function render(){
     var d=getData();
-    $('f-title').placeholder = d.meso ? (d.lang==='en'?'Mesogeos-Gündoğu J.V. Representative':'Mesogeos-Gündoğu İş Ortaklığı Temsilcisi') : (d.lang==='en'?'e.g. Project Manager':'Örn. Proje Müdürü');
+    $('repwrap').style.display = d.onbehalf ? 'block' : 'none';
+    $('f-title').placeholder = d.lang==='en' ? 'e.g. Site Manager' : 'Örn. Proje Müdürü / Şantiye Şefi';
     for(var i=1;i<=5;i++){ $('prev'+i).innerHTML = buildSig(i,d); }
     var html = buildSig(selectedOpt,d);
     $('final-sig').innerHTML = html;
@@ -449,7 +489,7 @@
   };
 
   // live updates
-  ['f-name','f-title','f-cep','f-tel','f-fax','f-email','f-web','f-address','f-logo','f-meso','f-lang','f-onbehalf'].forEach(function(id){
+  ['f-name','f-title','f-cep','f-tel','f-fax','f-email','f-web','f-address','f-repname','f-reptitle','f-logo','f-meso','f-lang','f-onbehalf'].forEach(function(id){
     var e=$(id); var ev=(id==='f-meso'||id==='f-logo'||id==='f-lang'||id==='f-onbehalf')?'change':'input';
     e.addEventListener(ev, render);
   });
