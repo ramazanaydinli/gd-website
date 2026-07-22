@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 
 // ─────────────────────────────────────────────────────────────────────
 // IMAGE BINDINGS — slot id → /public/images/*
@@ -37,6 +37,18 @@ type ServiceCard = {
 
 type ContactCol = { h: string; body: ReactNode };
 
+type LeadForm = {
+  eyebrow: string;
+  title: string;
+  desc: string;
+  fields: { name: string; company: string; email: string };
+  submit: string;
+  sending: string;
+  success: string;
+  error: string;
+  privacy: string;
+};
+
 type Locale = {
   nav: string[];
   heroSlides: Slide[];
@@ -57,6 +69,7 @@ type Locale = {
   };
   reach: { eyebrow: string; title: ReactNode[]; body: string };
   contact: { title: ReactNode[]; cols: ContactCol[]; ctaLabel: string };
+  form: LeadForm;
   marquee: string[];
   footerLinks: string[];
   footerCopy: string;
@@ -262,6 +275,17 @@ const CONTENT: Record<"tr" | "en", Locale> = {
         },
       ],
       ctaLabel: "İLETİŞİME GEÇİN →",
+    },
+    form: {
+      eyebrow: "SUNUM TALEBİ",
+      title: "Proje sunumumuzu isteyin",
+      desc: "Bilgilerinizi bırakın; projelerimizi ve referanslarımızı içeren sunumu en kısa sürede sizinle paylaşalım.",
+      fields: { name: "Ad Soyad", company: "Firma", email: "E-posta" },
+      submit: "Gönder",
+      sending: "Gönderiliyor…",
+      success: "Talebiniz alındı. En kısa sürede sizinle iletişime geçeceğiz.",
+      error: "Bir sorun oluştu. Lütfen tekrar deneyin ya da info@gundoguinsaat.com adresine yazın.",
+      privacy: "Bilgileriniz yalnızca sizinle iletişim kurmak için kullanılır.",
     },
     marquee: [
       "Katı Atık Bertaraf",
@@ -475,6 +499,17 @@ const CONTENT: Record<"tr" | "en", Locale> = {
         },
       ],
       ctaLabel: "GET IN TOUCH →",
+    },
+    form: {
+      eyebrow: "REQUEST DECK",
+      title: "Request our project deck",
+      desc: "Leave your details and we'll share the deck covering our projects and references shortly.",
+      fields: { name: "Full name", company: "Company", email: "Email" },
+      submit: "Send",
+      sending: "Sending…",
+      success: "Thanks — we've received your request and will get back to you shortly.",
+      error: "Something went wrong. Please try again or email info@gundoguinsaat.com.",
+      privacy: "Your details are used only to get in touch with you.",
     },
     marquee: [
       "Solid Waste Disposal",
@@ -830,6 +865,115 @@ function Reach({ t }: { t: Locale }) {
 }
 
 // ─────────────────────────────────────────────────────────────────────
+// LEAD FORM — posts to /api/contact (Worker → Resend)
+// ─────────────────────────────────────────────────────────────────────
+function ContactForm({ f }: { f: LeadForm }) {
+  const [name, setName] = useState("");
+  const [company, setCompany] = useState("");
+  const [email, setEmail] = useState("");
+  const [website, setWebsite] = useState(""); // honeypot — insanlar görmez
+  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (status === "sending") return;
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+    if (!name.trim() || !company.trim() || !emailOk) {
+      setStatus("error");
+      return;
+    }
+    setStatus("sending");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, company, email, website }),
+      });
+      const data = (await res.json().catch(() => ({ ok: false }))) as { ok?: boolean };
+      if (res.ok && data.ok) {
+        setStatus("success");
+        setName("");
+        setCompany("");
+        setEmail("");
+      } else {
+        setStatus("error");
+      }
+    } catch {
+      setStatus("error");
+    }
+  };
+
+  return (
+    <div className="gd-lead">
+      <div className="gd-lead__intro">
+        <div className="gd-lead__eyebrow">{f.eyebrow}</div>
+        <h3 className="gd-lead__title">{f.title}</h3>
+        <p className="gd-lead__desc">{f.desc}</p>
+      </div>
+      <form className="gd-lead__form" onSubmit={onSubmit} noValidate>
+        <div className="gd-lead__row">
+          <label className="gd-field">
+            <span>{f.fields.name}</span>
+            <input
+              type="text"
+              name="name"
+              autoComplete="name"
+              required
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </label>
+          <label className="gd-field">
+            <span>{f.fields.company}</span>
+            <input
+              type="text"
+              name="company"
+              autoComplete="organization"
+              required
+              value={company}
+              onChange={(e) => setCompany(e.target.value)}
+            />
+          </label>
+        </div>
+        <label className="gd-field">
+          <span>{f.fields.email}</span>
+          <input
+            type="email"
+            name="email"
+            autoComplete="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </label>
+        {/* honeypot: ekran dışında; botlar doldurur, gönderim sessizce iptal olur */}
+        <input
+          className="gd-lead__hp"
+          type="text"
+          name="website"
+          tabIndex={-1}
+          autoComplete="off"
+          aria-hidden="true"
+          value={website}
+          onChange={(e) => setWebsite(e.target.value)}
+        />
+        <button type="submit" className="gd-lead__submit" disabled={status === "sending"}>
+          {status === "sending" ? f.sending : f.submit}
+          <span aria-hidden="true">→</span>
+        </button>
+        {status === "success" && (
+          <p className="gd-lead__msg gd-lead__msg--ok">{f.success}</p>
+        )}
+        {status === "error" && (
+          <p className="gd-lead__msg gd-lead__msg--err">{f.error}</p>
+        )}
+        <p className="gd-lead__privacy">{f.privacy}</p>
+      </form>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────
 // CONTACT + FOOTER
 // ─────────────────────────────────────────────────────────────────────
 function Contact({ t }: { t: Locale }) {
@@ -838,6 +982,7 @@ function Contact({ t }: { t: Locale }) {
     <section id="contact" className="gd-contact">
       <div className="gd-contact__inner">
         <h2 className="gd-contact__title">{c.title}</h2>
+        <ContactForm f={t.form} />
         <div className="gd-contact__cols">
           <div className="gd-contact__col">
             <h4>{c.cols[0].h}</h4>
@@ -963,6 +1108,11 @@ function CookieBanner({ lang }: { lang: "tr" | "en" }) {
 export default function Home() {
   const [lang, setLang] = useState<"tr" | "en">("tr");
   const t = CONTENT[lang];
+  // <html lang>'i seçili dile göre güncelle — yoksa CSS text-transform:uppercase
+  // İngilizce metni Türkçe kurallarıyla büyütür ("DRINKING" → "DRİNKİNG").
+  useEffect(() => {
+    document.documentElement.lang = lang;
+  }, [lang]);
   return (
     <>
       <Nav lang={lang} setLang={setLang} t={t} />

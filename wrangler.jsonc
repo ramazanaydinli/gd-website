@@ -2,10 +2,23 @@
   // Cloudflare Workers config — deploys the Next.js static export in ./out
   // as a Worker with static asset binding. Same edge network as Pages, with
   // the new unified deploy model.
+  //
+  // The Worker (worker/index.ts) serves static assets via the ASSETS binding
+  // and handles POST /api/contact (lead form → e-mail via Resend).
   "name": "gd-website",
   "compatibility_date": "2025-05-01",
+  "main": "worker/index.ts",
   "assets": {
     "directory": "./out",
+    "binding": "ASSETS",
     "not_found_handling": "404-page"
+  },
+  "vars": {
+    // Bildirimin gideceği kutu ve gönderen adres (secret DEĞİL).
+    // Domain Resend'de doğrulanınca CONTACT_FROM'u @gundoguinsaat.com yap.
+    "CONTACT_TO": "info@gundoguinsaat.com",
+    "CONTACT_FROM": "Gündoğu İnşaat <onboarding@resend.dev>"
   }
+  // RESEND_API_KEY bir SECRET'tir — buraya YAZMA.
+  // `npx wrangler secret put RESEND_API_KEY` ile ya da Cloudflare panosundan ekle.
 }

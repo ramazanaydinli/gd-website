@@ -650,6 +650,82 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .gd-contact__cta-arrow { color: var(--red); transition: color 180ms; }
 .gd-contact__cta:hover .gd-contact__cta-arrow { color: var(--red); }
 
+/* ─────────────────────────────────────────────────────────────────────
+   LEAD FORM  —  sunum talebi (İletişim bölümü içinde)
+   ───────────────────────────────────────────────────────────────────── */
+.gd-lead {
+  margin-top: 64px;
+  display: grid; grid-template-columns: 1fr 1.1fr; gap: 64px;
+  align-items: start;
+  padding-bottom: 56px;
+  border-bottom: 1px solid var(--line);
+}
+.gd-lead__eyebrow {
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  letter-spacing: 0.3em; text-transform: uppercase; color: var(--red);
+}
+.gd-lead__title {
+  font-family: 'Inter Tight', sans-serif; font-weight: 300;
+  font-size: clamp(26px, 3vw, 40px); line-height: 1.06;
+  text-transform: uppercase; letter-spacing: -0.02em;
+  color: var(--bone); margin: 18px 0 0;
+}
+.gd-lead__desc {
+  font-family: 'Inter Tight', sans-serif; font-size: 15px; line-height: 1.7;
+  color: var(--silver); margin: 18px 0 0; max-width: 420px;
+}
+.gd-lead__form { display: flex; flex-direction: column; gap: 18px; }
+.gd-lead__row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.gd-field { display: flex; flex-direction: column; gap: 8px; }
+.gd-field > span {
+  font-family: 'JetBrains Mono', monospace; font-size: 10px;
+  letter-spacing: 0.22em; text-transform: uppercase; color: var(--silver-2);
+}
+.gd-field input {
+  width: 100%; padding: 13px 14px;
+  background: rgba(203, 211, 222, 0.04);
+  border: 1px solid var(--line-strong);
+  color: var(--bone);
+  font-family: 'Inter Tight', sans-serif; font-size: 15px;
+  border-radius: 4px;
+  transition: border-color 160ms, background 160ms;
+}
+.gd-field input:focus {
+  outline: none; border-color: var(--red);
+  background: rgba(203, 211, 222, 0.07);
+}
+.gd-lead__hp {
+  position: absolute; left: -9999px; top: auto;
+  width: 1px; height: 1px; opacity: 0; pointer-events: none;
+}
+.gd-lead__submit {
+  align-self: flex-start;
+  display: inline-flex; align-items: center; gap: 12px;
+  padding: 14px 22px; margin-top: 4px;
+  border: 1px solid var(--bone); background: var(--bone); color: var(--navy);
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  border-radius: 4px;
+  transition: background 160ms, color 160ms, opacity 160ms;
+}
+.gd-lead__submit:hover { background: transparent; color: var(--bone); }
+.gd-lead__submit:disabled { opacity: 0.5; cursor: default; }
+.gd-lead__submit span { color: var(--red); }
+.gd-lead__msg {
+  font-family: 'Inter Tight', sans-serif; font-size: 14px; line-height: 1.5;
+  margin: 2px 0 0;
+}
+.gd-lead__msg--ok { color: #7BD88F; }
+.gd-lead__msg--err { color: #F2909A; }
+.gd-lead__privacy {
+  font-family: 'JetBrains Mono', monospace; font-size: 10px;
+  letter-spacing: 0.08em; color: var(--silver-2); margin: 4px 0 0;
+}
+@media (max-width: 920px) {
+  .gd-lead { grid-template-columns: 1fr; gap: 32px; margin-top: 48px; }
+  .gd-lead__row { grid-template-columns: 1fr; }
+}
+
 .gd-footer {
   padding: 28px 0 24px;
   display: grid; grid-template-columns: auto 1fr auto;
