@@ -94,7 +94,15 @@ async function handleContact(request: Request, env: Env): Promise<Response> {
   });
 
   if (!resp.ok) {
-    return json({ ok: false, error: "send_failed" }, 502);
+    let detail = "";
+    try {
+      detail = await resp.text();
+    } catch {
+      /* ignore */
+    }
+    console.error("resend_error", resp.status, detail);
+    // NOT: detail alanı geçici teşhis içindir; sorun çözülünce kaldırılacak.
+    return json({ ok: false, error: "send_failed", status: resp.status, detail: detail.slice(0, 400) }, 502);
   }
 
   return json({ ok: true });
