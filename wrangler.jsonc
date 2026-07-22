@@ -17,7 +17,7 @@
     // Bildirimin gideceği kutu ve gönderen adres (secret DEĞİL).
     // Domain Resend'de doğrulanınca CONTACT_FROM'u @gundoguinsaat.com yap.
     "CONTACT_TO": "info@gundoguinsaat.com",
-    "CONTACT_FROM": "Gündoğu İnşaat <onboarding@resend.dev>"
+    "CONTACT_FROM": "Gündoğu İnşaat <noreply@gundoguinsaat.com>"
   }
   // RESEND_API_KEY bir SECRET'tir — buraya YAZMA.
   // `npx wrangler secret put RESEND_API_KEY` ile ya da Cloudflare panosundan ekle.
