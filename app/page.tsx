@@ -68,7 +68,7 @@ const CONTENT: Record<"tr" | "en", Locale> = {
     heroSlides: [
       {
         num: "01",
-        label: "KATI ATIK TESİSLERİ",
+        label: "KATI ATIK BERTARAF",
         headline: [
           "ATIKTAN",
           "DEĞER ÜRETEN",
@@ -76,11 +76,11 @@ const CONTENT: Record<"tr" | "en", Locale> = {
             ALTYAPI.
           </em>,
         ],
-        sub: "Modern katı atık yönetim tesislerinin tasarımı ve inşası — sürdürülebilir, ölçeklenebilir, yönetmeliklere tam uyumlu.",
+        sub: "Modern evsel atık yönetim tesislerinin tasarımı ve inşası. Sürdürülebilir, ölçeklenebilir ve yönetmeliklere tam uyumlu çözümler sunuyoruz.",
       },
       {
         num: "02",
-        label: "ATIK SU ARITMA",
+        label: "İÇME SUYU & ATIKSU ARITMA",
         headline: [
           "ENDÜSTRİYEL",
           "VE EVSEL SUYA",
@@ -88,7 +88,7 @@ const CONTENT: Record<"tr" | "en", Locale> = {
             İKİNCİ HAYAT.
           </em>,
         ],
-        sub: "Mekanik, biyolojik ve ileri arıtma proseslerinin entegre tasarımı — küçük ölçekli paket tesisten metropol kapasiteye.",
+        sub: "Mekanik, biyolojik ve ileri arıtma proseslerinin entegre tasarımı. Küçük ölçekli paket tesisten metropol kapasitesine kadar çözüm üretiyoruz.",
       },
       {
         num: "03",
@@ -100,7 +100,7 @@ const CONTENT: Record<"tr" | "en", Locale> = {
             DAMARLARI.
           </em>,
         ],
-        sub: "İçme suyu şebekeleri, terfi istasyonları, kanalizasyon hat ve kolektör imalatı — hassas mühendislik, dayanıklı yapı.",
+        sub: "İçme suyu şebekeleri, terfi istasyonları, kanalizasyon hattı ve kolektör imalatı. Hassas mühendislikle dayanıklı yapılar kuruyoruz.",
       },
       {
         num: "04",
@@ -112,7 +112,7 @@ const CONTENT: Record<"tr" | "en", Locale> = {
             EKSİKSİZ İNŞAA.
           </em>,
         ],
-        sub: "Yol, sanat yapısı, betonarme ve çelik üst yapı işleri — anahtar teslim, zamanında, kontrollü kalite ile.",
+        sub: "Yol, sanat yapısı, betonarme ve çelik üst yapı işleri. Anahtar teslim mühendislik çözümleri sunuyoruz.",
       },
     ],
     side: "BÖLÜM · 01 / 04",
@@ -126,7 +126,7 @@ const CONTENT: Record<"tr" | "en", Locale> = {
         <em key="2">MÜHENDİSLİK.</em>,
       ],
       copy: [
-        "Gündoğu İnşaat; katı atık tesisleri, atık su arıtma, içme suyu ve kanalizasyon sistemleri ile altyapı ve üst yapı işleri olmak üzere dört ana faaliyet alanında, hem yurt içinde hem de yurt dışında projeler yürütmektedir.",
+        "Gündoğu İnşaat; katı atık bertaraf, atıksu ve içme suyu arıtma, içme suyu isale, şebeke ve atık su kanalizasyon sistemleriyle altyapı ve üstyapı projeleri başta olmak üzere geniş bir faaliyet yelpazesinde, hem yurt içinde hem de yurt dışında çalışmalarını sürdürmektedir.",
         "Her proje, sahaya özgü mühendislik çözümleriyle planlanır; tasarımdan teslim sonrası işletmeye kadar tek elden, kontrollü ve şeffaf süreçlerle hayata geçirilir.",
       ],
       metrics: [
@@ -150,7 +150,7 @@ const CONTENT: Record<"tr" | "en", Locale> = {
         {
           num: "01",
           tag: "ÇEVRE · ATIK",
-          title: "Katı Atık Tesisleri",
+          title: "Katı Atık Bertaraf",
           desc: "Toplama, ayrıştırma, geri kazanım ve bertaraf altyapısının tasarım ve inşası.",
           items: [
             "Düzenli depolama sahaları",
@@ -163,8 +163,8 @@ const CONTENT: Record<"tr" | "en", Locale> = {
         {
           num: "02",
           tag: "SU · ARITMA",
-          title: "Atık Su Arıtma Tesisleri",
-          desc: "Evsel ve endüstriyel atık su için mekanik, biyolojik ve ileri arıtma sistemleri.",
+          title: "İçme Suyu ve Atıksu Arıtma Tesisleri",
+          desc: "İçme suyu arıtımının yanı sıra evsel ve endüstriyel atık su için mekanik, biyolojik ve ileri arıtma sistemleri.",
           items: [
             "Paket arıtma tesisleri",
             "Biyolojik reaktörler (MBR/SBR)",
@@ -176,7 +176,7 @@ const CONTENT: Record<"tr" | "en", Locale> = {
         {
           num: "03",
           tag: "ŞEBEKE · ŞEHİR",
-          title: "İçme Suyu & Kanalizasyon",
+          title: "İçme Suyu & Kanalizasyon Projeleri",
           desc: "Şehir ölçeğinde içme suyu ve kanalizasyon şebekelerinin imalatı ve revizyonu.",
           items: [
             "İçme suyu hat & şebeke",
@@ -189,7 +189,7 @@ const CONTENT: Record<"tr" | "en", Locale> = {
         {
           num: "04",
           tag: "YAPI · İNŞAAT",
-          title: "Altyapı & Üst Yapı",
+          title: "Altyapı, Üstyapı & Endüstriyel Tesisler",
           desc: "Yol, sanat yapıları, betonarme ve çelik üst yapı imalatı — anahtar teslim.",
           items: [
             "Yol & sanat yapıları",
@@ -204,11 +204,11 @@ const CONTENT: Record<"tr" | "en", Locale> = {
     reach: {
       eyebrow: "03 — COĞRAFYA",
       title: ["YURT İÇİ.", <br key="x" />, "YURT ", <em key="y">DIŞI.</em>],
-      body: "Gündoğu İnşaat; Türkiye genelinde aktif olarak yürüttüğü altyapı ve üst yapı projelerinin yanı sıra, yurtdışı sahalarda da mühendislik ve yapım hizmetleri sunmaktadır. Lokasyondan bağımsız aynı disiplin: doğru planlama, denetimli inşa, şeffaf raporlama.",
+      body: "Gündoğu İnşaat; Türkiye genelinde aktif olarak yürüttüğü altyapı ve üst yapı projelerinin yanı sıra, başta Atina (Yunanistan) ve Kuzey Makedonya olmak üzere yurt dışı sahalarda da mühendislik ve yapım hizmetleri sunmaktadır. Lokasyondan bağımsız aynı disiplin: doğru planlama, denetimli inşa, şeffaf raporlama.",
     },
     contact: {
       title: [
-        "PROJENİZ İÇİN",
+        "PROJELERİNİZ İÇİN",
         <br key="x" />,
         <em key="y">GÜNDOĞU&apos;YU</em>,
         " TANIYIN.",
@@ -264,7 +264,7 @@ const CONTENT: Record<"tr" | "en", Locale> = {
       ctaLabel: "İLETİŞİME GEÇİN →",
     },
     marquee: [
-      "Katı Atık",
+      "Katı Atık Bertaraf",
       "Atık Su Arıtma",
       "İçme Suyu",
       "Kanalizasyon",
@@ -281,7 +281,7 @@ const CONTENT: Record<"tr" | "en", Locale> = {
     heroSlides: [
       {
         num: "01",
-        label: "SOLID WASTE FACILITIES",
+        label: "SOLID WASTE DISPOSAL",
         headline: [
           "INFRASTRUCTURE",
           "THAT TURNS WASTE",
@@ -289,11 +289,11 @@ const CONTENT: Record<"tr" | "en", Locale> = {
             INTO VALUE.
           </em>,
         ],
-        sub: "Design and construction of modern solid-waste management facilities — sustainable, scalable, fully compliant.",
+        sub: "Design and construction of modern municipal waste management facilities. We deliver sustainable, scalable and fully regulation-compliant solutions.",
       },
       {
         num: "02",
-        label: "WASTEWATER TREATMENT",
+        label: "WATER & WASTEWATER TREATMENT",
         headline: [
           "A SECOND LIFE",
           "FOR INDUSTRIAL",
@@ -301,7 +301,7 @@ const CONTENT: Record<"tr" | "en", Locale> = {
             AND URBAN WATER.
           </em>,
         ],
-        sub: "Integrated mechanical, biological and advanced treatment design — from package plants to metropolitan capacity.",
+        sub: "Integrated mechanical, biological and advanced treatment design. We build solutions from small package plants to metropolitan capacity.",
       },
       {
         num: "03",
@@ -313,7 +313,7 @@ const CONTENT: Record<"tr" | "en", Locale> = {
             LINES.
           </em>,
         ],
-        sub: "Drinking-water networks, pumping stations, sewerage lines and collectors — precise engineering, durable build.",
+        sub: "Drinking-water networks, pumping stations, sewerage lines and collectors. We build durable structures with precise engineering.",
       },
       {
         num: "04",
@@ -325,7 +325,7 @@ const CONTENT: Record<"tr" | "en", Locale> = {
             END-TO-END.
           </em>,
         ],
-        sub: "Roads, art structures, reinforced concrete and steel superstructures — turnkey, on time, quality controlled.",
+        sub: "Roads, art structures, reinforced concrete and steel superstructures. We deliver turnkey engineering solutions.",
       },
     ],
     side: "SECTION · 01 / 04",
@@ -339,7 +339,7 @@ const CONTENT: Record<"tr" | "en", Locale> = {
         <em key="2">OUTLASTS.</em>,
       ],
       copy: [
-        "Gündoğu İnşaat operates across four primary fields — solid-waste facilities, wastewater treatment, water and sewerage networks, and infrastructure & building works — both inside Türkiye and abroad.",
+        "Gündoğu İnşaat operates across a broad range of fields — solid-waste disposal, wastewater and drinking-water treatment, drinking-water transmission, distribution and sewerage networks, and infrastructure and superstructure projects — both inside Türkiye and abroad.",
         "Every project is planned with site-specific engineering, delivered as a single-source, controlled and transparent process from design to commissioning.",
       ],
       metrics: [
@@ -363,7 +363,7 @@ const CONTENT: Record<"tr" | "en", Locale> = {
         {
           num: "01",
           tag: "ENV · WASTE",
-          title: "Solid Waste Facilities",
+          title: "Solid Waste Disposal",
           desc: "Design and construction of collection, sorting, recovery and disposal infrastructure.",
           items: [
             "Sanitary landfills",
@@ -376,8 +376,8 @@ const CONTENT: Record<"tr" | "en", Locale> = {
         {
           num: "02",
           tag: "WATER · TREATMENT",
-          title: "Wastewater Treatment",
-          desc: "Mechanical, biological and advanced systems for domestic and industrial wastewater.",
+          title: "Drinking Water & Wastewater Treatment",
+          desc: "Drinking-water treatment plus mechanical, biological and advanced systems for domestic and industrial wastewater.",
           items: [
             "Package treatment plants",
             "Biological reactors (MBR/SBR)",
@@ -389,7 +389,7 @@ const CONTENT: Record<"tr" | "en", Locale> = {
         {
           num: "03",
           tag: "NETWORK · CITY",
-          title: "Water & Sewerage",
+          title: "Water & Sewerage Projects",
           desc: "City-scale drinking water and sewerage networks — installation and rehabilitation.",
           items: [
             "Distribution networks",
@@ -402,7 +402,7 @@ const CONTENT: Record<"tr" | "en", Locale> = {
         {
           num: "04",
           tag: "STRUCTURE · BUILD",
-          title: "Infrastructure & Building",
+          title: "Infrastructure, Superstructure & Industrial Facilities",
           desc: "Roads, art structures, reinforced concrete and steel superstructures — turnkey.",
           items: [
             "Roads & art structures",
@@ -417,14 +417,14 @@ const CONTENT: Record<"tr" | "en", Locale> = {
     reach: {
       eyebrow: "03 — REACH",
       title: ["DOMESTIC.", <br key="x" />, <em key="y">INTERNATIONAL.</em>],
-      body: "Beyond active operations across Türkiye, Gündoğu İnşaat delivers engineering and construction services on international sites. Same discipline regardless of geography: rigorous planning, controlled execution, transparent reporting.",
+      body: "Beyond active operations across Türkiye, Gündoğu İnşaat delivers engineering and construction services on international sites — notably Athens (Greece) and North Macedonia. Same discipline regardless of geography: rigorous planning, controlled execution, transparent reporting.",
     },
     contact: {
       title: [
         "MEET ",
         <em key="y">GÜNDOĞU</em>,
         <br key="x" />,
-        "FOR YOUR NEXT PROJECT.",
+        "FOR YOUR PROJECTS.",
       ],
       cols: [
         {
@@ -477,7 +477,7 @@ const CONTENT: Record<"tr" | "en", Locale> = {
       ctaLabel: "GET IN TOUCH →",
     },
     marquee: [
-      "Solid Waste",
+      "Solid Waste Disposal",
       "Wastewater",
       "Drinking Water",
       "Sewerage",
