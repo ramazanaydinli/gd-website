@@ -52,6 +52,7 @@ async function handleContact(request: Request, env: Env): Promise<Response> {
   const name = clean(data.name);
   const company = clean(data.company);
   const email = clean(data.email);
+  const phone = clean(data.phone); // opsiyonel
 
   if (!name || !company || !email || !EMAIL_RE.test(email)) {
     return json({ ok: false, error: "validation" }, 422);
@@ -71,11 +72,12 @@ async function handleContact(request: Request, env: Env): Promise<Response> {
         <tr><td style="padding:4px 16px 4px 0;color:#6B7686">Ad Soyad</td><td style="padding:4px 0"><strong>${esc(name)}</strong></td></tr>
         <tr><td style="padding:4px 16px 4px 0;color:#6B7686">Firma</td><td style="padding:4px 0"><strong>${esc(company)}</strong></td></tr>
         <tr><td style="padding:4px 16px 4px 0;color:#6B7686">E-posta</td><td style="padding:4px 0"><a href="mailto:${esc(email)}">${esc(email)}</a></td></tr>
+        ${phone ? `<tr><td style="padding:4px 16px 4px 0;color:#6B7686">Telefon</td><td style="padding:4px 0"><strong>${esc(phone)}</strong></td></tr>` : ""}
       </table>
       <p style="margin:20px 0 0;color:#6B7686;font-size:13px">Bu talep gundoguinsaat.com üzerindeki iletişim formundan gönderildi. Yanıtlarsanız doğrudan talep sahibine ulaşır.</p>
     </div>`.trim();
 
-  const text = `Yeni sunum talebi\n\nAd Soyad: ${name}\nFirma: ${company}\nE-posta: ${email}\n\n(gundoguinsaat.com iletişim formu)`;
+  const text = `Yeni sunum talebi\n\nAd Soyad: ${name}\nFirma: ${company}\nE-posta: ${email}${phone ? `\nTelefon: ${phone}` : ""}\n\n(gundoguinsaat.com iletişim formu)`;
 
   const resp = await fetch("https://api.resend.com/emails", {
     method: "POST",

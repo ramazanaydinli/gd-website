@@ -41,7 +41,9 @@ type LeadForm = {
   eyebrow: string;
   title: string;
   desc: string;
-  fields: { name: string; company: string; email: string };
+  fields: { name: string; company: string; email: string; phone: string };
+  emailHint: string;
+  optional: string;
   submit: string;
   sending: string;
   success: string;
@@ -280,7 +282,9 @@ const CONTENT: Record<"tr" | "en", Locale> = {
       eyebrow: "SUNUM TALEBİ",
       title: "Proje sunumumuzu isteyin",
       desc: "Bilgilerinizi bırakın; projelerimizi ve referanslarımızı içeren sunumu en kısa sürede sizinle paylaşalım.",
-      fields: { name: "Ad Soyad", company: "Firma", email: "E-posta" },
+      fields: { name: "Ad Soyad", company: "Firma", email: "E-posta", phone: "Telefon" },
+      emailHint: "Lütfen firma (kurumsal) e-posta adresinizi girin — sunumu firma e-postanıza iletiyoruz.",
+      optional: "opsiyonel",
       submit: "Gönder",
       sending: "Gönderiliyor…",
       success: "Talebiniz alındı. En kısa sürede sizinle iletişime geçeceğiz.",
@@ -504,7 +508,9 @@ const CONTENT: Record<"tr" | "en", Locale> = {
       eyebrow: "REQUEST DECK",
       title: "Request our project deck",
       desc: "Leave your details and we'll share the deck covering our projects and references shortly.",
-      fields: { name: "Full name", company: "Company", email: "Email" },
+      fields: { name: "Full name", company: "Company", email: "Email", phone: "Phone" },
+      emailHint: "Please use your company (business) email address — we send the deck to your company email.",
+      optional: "optional",
       submit: "Send",
       sending: "Sending…",
       success: "Thanks — we've received your request and will get back to you shortly.",
@@ -871,6 +877,8 @@ function ContactForm({ f }: { f: LeadForm }) {
   const [name, setName] = useState("");
   const [company, setCompany] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState(""); // opsiyonel
+  const [emailFocus, setEmailFocus] = useState(false);
   const [website, setWebsite] = useState(""); // honeypot — insanlar görmez
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
 
@@ -887,7 +895,7 @@ function ContactForm({ f }: { f: LeadForm }) {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, company, email, website }),
+        body: JSON.stringify({ name, company, email, phone, website }),
       });
       const data = (await res.json().catch(() => ({ ok: false }))) as { ok?: boolean };
       if (res.ok && data.ok) {
@@ -895,6 +903,7 @@ function ContactForm({ f }: { f: LeadForm }) {
         setName("");
         setCompany("");
         setEmail("");
+        setPhone("");
       } else {
         setStatus("error");
       }
@@ -944,6 +953,23 @@ function ContactForm({ f }: { f: LeadForm }) {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            onFocus={() => setEmailFocus(true)}
+            onBlur={() => setEmailFocus(false)}
+          />
+          {(emailFocus || email.length > 0) && (
+            <span className="gd-field__hint">{f.emailHint}</span>
+          )}
+        </label>
+        <label className="gd-field">
+          <span>
+            {f.fields.phone} <em className="gd-field__opt">({f.optional})</em>
+          </span>
+          <input
+            type="tel"
+            name="phone"
+            autoComplete="tel"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
           />
         </label>
         {/* honeypot: ekran dışında; botlar doldurur, gönderim sessizce iptal olur */}

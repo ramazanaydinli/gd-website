@@ -694,6 +694,15 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   outline: none; border-color: var(--red);
   background: rgba(203, 211, 222, 0.07);
 }
+.gd-field__hint {
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 12.5px; line-height: 1.45;
+  color: var(--silver-2); margin-top: 2px;
+}
+.gd-field__opt {
+  font-style: normal; font-weight: 400;
+  color: var(--steel-2);
+}
 .gd-lead__hp {
   position: absolute; left: -9999px; top: auto;
   width: 1px; height: 1px; opacity: 0; pointer-events: none;

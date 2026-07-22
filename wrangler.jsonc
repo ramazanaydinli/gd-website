@@ -16,7 +16,7 @@
   "vars": {
     // Bildirimin gideceği kutu ve gönderen adres (secret DEĞİL).
     // Domain Resend'de doğrulanınca CONTACT_FROM'u @gundoguinsaat.com yap.
-    "CONTACT_TO": "ramazan.aydinli@gundoguinsaat.com.tr",
+    "CONTACT_TO": "info@gundoguinsaat.com",
     "CONTACT_FROM": "Gündoğu İnşaat <noreply@gundoguinsaat.com>"
   }
   // RESEND_API_KEY bir SECRET'tir — buraya YAZMA.
