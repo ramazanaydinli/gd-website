@@ -14,6 +14,18 @@ const HERO_IMAGES = [
 const ABOUT_STRIP_IMAGE = "/images/dam.jpeg";
 const REACH_MAP_IMAGE = "/images/map.jpeg";
 
+// Ofis işaretlerinin haritadaki yeri. x/y, map.jpeg'in kendi ölçüsüne göre
+// yüzde (2752×1536) — y, işaretin baş kısmının merkezi. `align` kartın hangi
+// yöne açılacağını söyler; kenardaki işaretlerde kart taşmasın diye.
+type MapPinId = "athens" | "ankara" | "diyarbakir";
+type MapPin = { id: MapPinId; x: number; y: number; align: "start" | "center" | "end" };
+
+const MAP_PINS: MapPin[] = [
+  { id: "athens", x: 29.524, y: 59.863, align: "start" },
+  { id: "ankara", x: 59.357, y: 45.508, align: "center" },
+  { id: "diyarbakir", x: 82.867, y: 57.552, align: "end" },
+];
+
 // ─────────────────────────────────────────────────────────────────────
 // CONTENT — TR + EN
 // ─────────────────────────────────────────────────────────────────────
@@ -70,6 +82,7 @@ type Locale = {
     cards: ServiceCard[];
   };
   reach: { eyebrow: string; title: ReactNode[]; body: string };
+  mapPins: Record<MapPinId, { city: string; lines: string[] }>;
   contact: { title: ReactNode[]; cols: ContactCol[]; ctaLabel: string };
   form: LeadForm;
   marquee: string[];
@@ -191,7 +204,7 @@ const CONTENT: Record<"tr" | "en", Locale> = {
         {
           num: "03",
           tag: "ŞEBEKE · ŞEHİR",
-          title: "İçme Suyu & Kanalizasyon Projeleri",
+          title: "İçme Suyu & Kanalizasyon ve Altyapı Projeleri",
           desc: "Şehir ölçeğinde içme suyu ve kanalizasyon şebekelerinin imalatı ve revizyonu.",
           items: [
             "İçme suyu hat & şebeke",
@@ -203,14 +216,14 @@ const CONTENT: Record<"tr" | "en", Locale> = {
         },
         {
           num: "04",
-          tag: "YAPI · İNŞAAT",
-          title: "Altyapı, Üstyapı & Endüstriyel Tesisler",
-          desc: "Yol, sanat yapıları, betonarme ve çelik üst yapı imalatı — anahtar teslim.",
+          tag: "ENERJİ · ENDÜSTRİ",
+          title: "Endüstri ve Enerji Tesisleri",
+          desc: "Endüstriyel üretim tesisleri ile enerji ve enerji geri kazanım yapılarının inşası ve montajı — anahtar teslim.",
           items: [
-            "Yol & sanat yapıları",
-            "Betonarme & çelik yapı",
-            "Endüstriyel yapılar",
-            "Kazı, dolgu, yol üst yapısı",
+            "Endüstriyel tesis & üretim yapıları",
+            "Enerji santrali yapıları",
+            "Biyogaz & enerji geri kazanımı",
+            "Çelik konstrüksiyon & montaj",
           ],
           icon: "beam",
         },
@@ -220,6 +233,20 @@ const CONTENT: Record<"tr" | "en", Locale> = {
       eyebrow: "03 — COĞRAFYA",
       title: ["YURT İÇİ.", <br key="x" />, "YURT ", <em key="y">DIŞI.</em>],
       body: "Gündoğu İnşaat; Türkiye genelinde aktif olarak yürüttüğü altyapı ve üst yapı projelerinin yanı sıra, başta Atina (Yunanistan) ve Kuzey Makedonya olmak üzere yurt dışı sahalarda da mühendislik ve yapım hizmetleri sunmaktadır. Lokasyondan bağımsız aynı disiplin: doğru planlama, denetimli inşa, şeffaf raporlama.",
+    },
+    mapPins: {
+      athens: {
+        city: "ATİNA · YUNANİSTAN",
+        lines: ["67 Aiolou Str.", "10551 Athens · Greece"],
+      },
+      ankara: {
+        city: "ANKARA OFİS",
+        lines: ["Kızılırmak Mah. 1446. Cadde", "Alternatif Plaza Kat 10 No: 39", "Çankaya · Ankara"],
+      },
+      diyarbakir: {
+        city: "MERKEZ OFİS",
+        lines: ["Peyas Mah. Selahaddin Eyyubi Bul.", "No: 35/1 · Kayapınar", "Diyarbakır"],
+      },
     },
     contact: {
       title: [
@@ -263,6 +290,18 @@ const CONTENT: Record<"tr" | "en", Locale> = {
           ),
         },
         {
+          h: "ATİNA OFİS · YUNANİSTAN",
+          body: (
+            <>
+              67 Aiolou Str.
+              <br />
+              10551 Athens
+              <br />
+              Yunanistan
+            </>
+          ),
+        },
+        {
           h: "İLETİŞİM",
           body: (
             <>
@@ -279,11 +318,11 @@ const CONTENT: Record<"tr" | "en", Locale> = {
       ctaLabel: "İLETİŞİME GEÇİN →",
     },
     form: {
-      eyebrow: "SUNUM TALEBİ",
-      title: "Proje sunumumuzu isteyin",
-      desc: "Bilgilerinizi bırakın; projelerimizi ve referanslarımızı içeren sunumu en kısa sürede sizinle paylaşalım.",
+      eyebrow: "KATALOG TALEBİ",
+      title: "Şirket kataloğumuza ulaşmak için iletişime geçin",
+      desc: "Bilgilerinizi bırakın; projelerimizi ve referanslarımızı içeren şirket kataloğumuzu en kısa sürede sizinle paylaşalım.",
       fields: { name: "Ad Soyad", company: "Firma", email: "E-posta", phone: "Telefon" },
-      emailHint: "Lütfen firma (kurumsal) e-posta adresinizi girin — sunumu firma e-postanıza iletiyoruz.",
+      emailHint: "Lütfen firma (kurumsal) e-posta adresinizi girin — kataloğu firma e-postanıza iletiyoruz.",
       optional: "opsiyonel",
       submit: "Gönder",
       sending: "Gönderiliyor…",
@@ -417,7 +456,7 @@ const CONTENT: Record<"tr" | "en", Locale> = {
         {
           num: "03",
           tag: "NETWORK · CITY",
-          title: "Water & Sewerage Projects",
+          title: "Water, Sewerage & Infrastructure Projects",
           desc: "City-scale drinking water and sewerage networks — installation and rehabilitation.",
           items: [
             "Distribution networks",
@@ -429,14 +468,14 @@ const CONTENT: Record<"tr" | "en", Locale> = {
         },
         {
           num: "04",
-          tag: "STRUCTURE · BUILD",
-          title: "Infrastructure, Superstructure & Industrial Facilities",
-          desc: "Roads, art structures, reinforced concrete and steel superstructures — turnkey.",
+          tag: "ENERGY · INDUSTRY",
+          title: "Industrial & Energy Facilities",
+          desc: "Industrial production plants plus energy and energy-recovery structures — built and installed turnkey.",
           items: [
-            "Roads & art structures",
-            "RC & steel structures",
-            "Industrial buildings",
-            "Earthworks & pavement",
+            "Industrial & production plants",
+            "Power plant structures",
+            "Biogas & energy recovery",
+            "Steel structures & erection",
           ],
           icon: "beam",
         },
@@ -446,6 +485,20 @@ const CONTENT: Record<"tr" | "en", Locale> = {
       eyebrow: "03 — REACH",
       title: ["DOMESTIC.", <br key="x" />, <em key="y">INTERNATIONAL.</em>],
       body: "Beyond active operations across Türkiye, Gündoğu İnşaat delivers engineering and construction services on international sites — notably Athens (Greece) and North Macedonia. Same discipline regardless of geography: rigorous planning, controlled execution, transparent reporting.",
+    },
+    mapPins: {
+      athens: {
+        city: "ATHENS · GREECE",
+        lines: ["67 Aiolou Str.", "10551 Athens · Greece"],
+      },
+      ankara: {
+        city: "ANKARA OFFICE",
+        lines: ["Kızılırmak Mah. 1446. Cadde", "Alternatif Plaza Floor 10 No: 39", "Çankaya · Ankara"],
+      },
+      diyarbakir: {
+        city: "HEAD OFFICE",
+        lines: ["Peyas Mah. Selahaddin Eyyubi Blv.", "No: 35/1 · Kayapınar", "Diyarbakır"],
+      },
     },
     contact: {
       title: [
@@ -489,6 +542,18 @@ const CONTENT: Record<"tr" | "en", Locale> = {
           ),
         },
         {
+          h: "ATHENS OFFICE · GREECE",
+          body: (
+            <>
+              67 Aiolou Str.
+              <br />
+              10551 Athens
+              <br />
+              Greece
+            </>
+          ),
+        },
+        {
           h: "CONTACT",
           body: (
             <>
@@ -505,11 +570,11 @@ const CONTENT: Record<"tr" | "en", Locale> = {
       ctaLabel: "GET IN TOUCH →",
     },
     form: {
-      eyebrow: "REQUEST DECK",
-      title: "Request our project deck",
-      desc: "Leave your details and we'll share the deck covering our projects and references shortly.",
+      eyebrow: "CATALOGUE REQUEST",
+      title: "Get in touch for our company catalogue",
+      desc: "Leave your details and we'll share our company catalogue covering our projects and references shortly.",
       fields: { name: "Full name", company: "Company", email: "Email", phone: "Phone" },
-      emailHint: "Please use your company (business) email address — we send the deck to your company email.",
+      emailHint: "Please use your company (business) email address — we send the catalogue to your company email.",
       optional: "optional",
       submit: "Send",
       sending: "Sending…",
@@ -853,6 +918,9 @@ function Strip({ items }: { items: string[] }) {
 // ─────────────────────────────────────────────────────────────────────
 function Reach({ t }: { t: Locale }) {
   const r = t.reach;
+  const [active, setActive] = useState<MapPinId | null>(null);
+  const clear = (id: MapPinId) => setActive((cur) => (cur === id ? null : cur));
+
   return (
     <section className="gd-reach">
       <div className="gd-reach__inner">
@@ -862,8 +930,48 @@ function Reach({ t }: { t: Locale }) {
           <p className="gd-reach__body">{r.body}</p>
         </div>
         <div className="gd-reach__map">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={REACH_MAP_IMAGE} alt="Reach map" />
+          <div className="gd-reach__clip">
+            {/* Görsel 16:8.93, çerçeve 16:10 → `cover` sağdan/soldan kırpıyor.
+                Bu katman tam olarak o kırpılmış kutuyu tekrar kuruyor; işaret
+                katmanı da aynı ölçüde, böylece pinleri haritanın kendi
+                koordinatlarıyla yerleştirebiliyoruz. */}
+            <div className="gd-reach__frame">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={REACH_MAP_IMAGE} alt="Reach map" />
+            </div>
+          </div>
+          {/* Kırpmanın dışında: adres kartı üst kenarı aşabilsin diye. */}
+          <div className="gd-reach__pins">
+            {MAP_PINS.map((p) => {
+              const info = t.mapPins[p.id];
+              return (
+                <div
+                  key={p.id}
+                  className={`gd-pin gd-pin--${p.align}${active === p.id ? " is-on" : ""}`}
+                  style={{ left: `${p.x}%`, top: `${p.y}%` }}
+                >
+                  <button
+                    type="button"
+                    className="gd-pin__hit"
+                    aria-label={`${info.city} — ${info.lines.join(", ")}`}
+                    onMouseEnter={() => setActive(p.id)}
+                    onMouseLeave={() => clear(p.id)}
+                    onFocus={() => setActive(p.id)}
+                    onBlur={() => clear(p.id)}
+                    onClick={() => setActive((cur) => (cur === p.id ? null : p.id))}
+                  />
+                  <div className="gd-pin__card" aria-hidden="true">
+                    <span className="gd-pin__city">{info.city}</span>
+                    {info.lines.map((line, i) => (
+                      <span className="gd-pin__line" key={i}>
+                        {line}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>
@@ -1034,6 +1142,10 @@ function Contact({ t }: { t: Locale }) {
           <div className="gd-contact__col">
             <h4>{c.cols[2].h}</h4>
             <p>{c.cols[2].body}</p>
+          </div>
+          <div className="gd-contact__col">
+            <h4>{c.cols[3].h}</h4>
+            <p>{c.cols[3].body}</p>
           </div>
         </div>
 
