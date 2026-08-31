@@ -241,11 +241,11 @@ const CONTENT: Record<"tr" | "en", Locale> = {
       },
       ankara: {
         city: "ANKARA OFİS",
-        lines: ["Kızılırmak Mah. 1446. Cadde", "Alternatif Plaza Kat 10 No: 39", "Çankaya · Ankara"],
+        lines: ["Kızılırmak Mah. 1446. Cadde", "Alternatif Plaza Kat 10 No: 39", "06510 Çankaya · Ankara"],
       },
       diyarbakir: {
         city: "MERKEZ OFİS",
-        lines: ["Peyas Mah. Selahaddin Eyyubi Bul.", "No: 35/1 · Kayapınar", "Diyarbakır"],
+        lines: ["Peyas Mah. Selahaddin Eyyubi Bul.", "No: 35/1", "21070 Kayapınar · Diyarbakır"],
       },
     },
     contact: {
@@ -264,7 +264,7 @@ const CONTENT: Record<"tr" | "en", Locale> = {
               <br />
               No: 35/1 İç Kapı No: 1
               <br />
-              Kayapınar · Diyarbakır · Türkiye
+              21070 Kayapınar · Diyarbakır · Türkiye
               <br />
               <span style={{ opacity: 0.6, fontSize: "0.85em" }}>
                 Adres Kodu: 2423270434
@@ -285,7 +285,7 @@ const CONTENT: Record<"tr" | "en", Locale> = {
               <br />
               Alternatif Plaza Kat 10 No: 39
               <br />
-              Çankaya · Ankara · Türkiye
+              06510 Çankaya · Ankara · Türkiye
             </>
           ),
         },
@@ -493,11 +493,11 @@ const CONTENT: Record<"tr" | "en", Locale> = {
       },
       ankara: {
         city: "ANKARA OFFICE",
-        lines: ["Kızılırmak Mah. 1446. Cadde", "Alternatif Plaza Floor 10 No: 39", "Çankaya · Ankara"],
+        lines: ["Kızılırmak Mah. 1446. Cadde", "Alternatif Plaza Floor 10 No: 39", "06510 Çankaya · Ankara"],
       },
       diyarbakir: {
         city: "HEAD OFFICE",
-        lines: ["Peyas Mah. Selahaddin Eyyubi Blv.", "No: 35/1 · Kayapınar", "Diyarbakır"],
+        lines: ["Peyas Mah. Selahaddin Eyyubi Blv.", "No: 35/1", "21070 Kayapınar · Diyarbakır"],
       },
     },
     contact: {
@@ -516,7 +516,7 @@ const CONTENT: Record<"tr" | "en", Locale> = {
               <br />
               No: 35/1 Door No: 1
               <br />
-              Kayapınar · Diyarbakır · Türkiye
+              21070 Kayapınar · Diyarbakır · Türkiye
               <br />
               <span style={{ opacity: 0.6, fontSize: "0.85em" }}>
                 Address code: 2423270434
@@ -537,7 +537,7 @@ const CONTENT: Record<"tr" | "en", Locale> = {
               <br />
               Alternatif Plaza Floor 10 No: 39
               <br />
-              Çankaya · Ankara · Türkiye
+              06510 Çankaya · Ankara · Türkiye
             </>
           ),
         },
